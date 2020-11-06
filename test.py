@@ -1,10 +1,10 @@
 import time
 
 
-from baseRobot import BaseRobot
+from BaseRobot import SimpleRobot
 
 
-robot = BaseRobot("test_robot_node")
+robot = SimpleRobot("test_robot_node")
 
 robot.loop_start()
 

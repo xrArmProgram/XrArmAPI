@@ -49,7 +49,7 @@ class CycleRepetitionError(Exception):
         print("Cycle Repetition Error,Do not run loop repeatedly")
 
 
-class BaseRobot(AbstractRobot):
+class SimpleRobot(AbstractRobot):
     """A simple example class"""
     def __init__(self, node_name):
         # Initialize robot parameters
