@@ -4,41 +4,43 @@ import threading
 from collections import Iterable
 
 
-class AbstractRobot(metaclass=ABCMeta):
+class AbstractRobot:
     """Abstract class of manipulator, which defines the basic operation interface of manipulator."""
+    __metaclass__ = ABCMeta
+
     @abstractmethod
-    def init(self) -> None:
+    def init(self):
         """Return the manipulator to its original position."""
         pass
 
     @abstractmethod
-    def update(self, angle: tuple) -> None:
+    def update(self, angle):
         """ Modifying the pose of the manipulator.
-            angle： An array of angle parameters for each joint."""
+            angle:An array of angle parameters for each joint."""
         pass
 
     @abstractmethod
-    def read(self) -> tuple:
+    def read(self):
         """Read the angle array of each joint of the manipulator."""
         pass
 
     @abstractmethod
-    def loop(self) -> None:
+    def loop(self):
         """Loop handle manipulator feedback"""
         pass
 
     @abstractmethod
-    def loop_start(self) -> None:
+    def loop_start(self):
         """Loop the handle manipulator feedback in the background"""
         pass
 
     @abstractmethod
-    def loop_stop(self) -> None:
+    def loop_stop(self):
         """Stop background loop"""
         pass
 
     @abstractmethod
-    def set_pose(self, pose: Iterable) -> None:
+    def set_pose(self, pose):
         """ Set the position of the manipulator end effector
             pose: [x,y,z]"""
         pass
@@ -65,7 +67,7 @@ class SimpleRobot(AbstractRobot):
         self.__angle = [0, 0, 0, 0, 0]
         print("Resetting robot now")
 
-    def update(self, angle: Iterable):
+    def update(self, angle):
         # Data validity detection
         if not (angle, Iterable):
             print("{} is required, but the input is {}".format(type(Iterable), type(angle), ))
