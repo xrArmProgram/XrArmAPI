@@ -57,6 +57,7 @@ class CycleRepetitionError(Exception):
 
 class SimpleRobot(AbstractRobot):
     """A simple example class"""
+
     def __init__(self, node_name):
         # Initialize robot parameters
         self.__angle = [0, 0, 0, 0, 0]
@@ -124,8 +125,3 @@ class SimpleRobot(AbstractRobot):
 
     def speak(self, audio_file, block=True):
         print(audio_file)
-
-
-
-
-

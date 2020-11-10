@@ -1,10 +1,8 @@
 from threading import Lock, Thread
 import rospy
 
-
 from BaseRobot import AbstractRobot
 from BaseSpeaker import PlaySoundSpeaker
-
 
 lock = Lock()
 
@@ -51,4 +49,3 @@ class ArmRobot(AbstractRobot, object):
 
     def speak(self, audio_file, block=True):
         self.speaker.speak(audio_file, block)
-

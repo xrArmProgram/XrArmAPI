@@ -1,10 +1,8 @@
 import time
 
-
 from BaseRobot import SimpleRobot
 from ArmRobot import ArmRobot
 import xrarm_audio
-
 
 robot = SimpleRobot("test_robot_node")
 # robot = ArmRobot("test_robot_node")
@@ -39,4 +37,3 @@ except Exception as e:
     print(e)
 
 robot.loop_stop()
-
