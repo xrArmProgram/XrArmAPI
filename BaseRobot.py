@@ -40,6 +40,10 @@ class AbstractRobot:
         pass
 
     @abstractmethod
+    def speak(self, audio_file, block=True):
+        pass
+
+    @abstractmethod
     def set_pose(self, pose):
         """ Set the position of the manipulator end effector
             pose: [x,y,z]"""
@@ -59,6 +63,7 @@ class SimpleRobot(AbstractRobot):
         self.__node_name = node_name
         self.__pose = None
         self.__is_run = False
+
         self.__loop_thread = threading.Thread(target=self.loop)
 
         print("Robot initialization successful")
@@ -116,6 +121,11 @@ class SimpleRobot(AbstractRobot):
     def set_pose(self, pose):
         print("set pose from {} to {}".format(self.__pose, pose))
         self.__pose = pose
+
+    def speak(self, audio_file, block=True):
+        print(audio_file)
+
+
 
 
 

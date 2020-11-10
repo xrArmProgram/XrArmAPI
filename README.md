@@ -33,18 +33,31 @@
 - read() -> tuple
 
     读取当前机械臂各个关节的角度。返回值为5个数据的数组。从0-4分别代表机械臂从下到上5个关节的角度。
- ------------
+- speak(audio_file, block)
+    播放音频。
+    参数说明：
+    - audio_file: 音频文件的路径
+    - block: 如果为False， 非阻塞执行
+    
+---------
  
  ## 文件结构说明
  - BaseRobot.py
  
-    - class AbstractRobot(metaclass=ABCMeta)：
+    - class AbstractRobot：
     
         定义机械臂的操作接口（抽象类）。之后需要实现机械臂接口继承该类即可。
     - class SimpleRobot(AbstractRobot):
     
         实现类一个用于调试的简单机械臂接口类。不能操纵机械臂。只用于接口调试。
- 
+
+ - BaseSpeaker.py
+    - class AbstractSpeaker
+    
+        抽象音频播放接口。
+    - class PlaySoundSpeaker(AbstractSpeaker)
+    
+        基于playsound的音频播放接口
  - test.py
  
     基于SimpleRobot的简单测试示例程序。
