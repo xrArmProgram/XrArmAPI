@@ -5,7 +5,7 @@
 - SimpleRobot(robot_name)<br>
 创建一个机器人对象<br>
 参数说明：
-    - **robot_name:** 创建的机器人节点的节点名称，在系统中唯一。
+    - robot_name: 创建的机器人节点的节点名称，在系统中唯一。
 
 - init() -> none
 
@@ -42,22 +42,26 @@
 ---------
  
  ## 文件结构说明
- - BaseRobot.py
- 
-    - class AbstractRobot：
+ - BASE 基类定义
+     - BaseRobot.py
+     
+        - class AbstractRobot：
+        
+            定义机械臂的操作接口（抽象类）。之后需要实现机械臂接口继承该类即可。
+        - class SimpleRobot(AbstractRobot):
+        
+            实现类一个用于调试的简单机械臂接口类。不能操纵机械臂。只用于接口调试。
     
-        定义机械臂的操作接口（抽象类）。之后需要实现机械臂接口继承该类即可。
-    - class SimpleRobot(AbstractRobot):
-    
-        实现类一个用于调试的简单机械臂接口类。不能操纵机械臂。只用于接口调试。
-
- - BaseSpeaker.py
-    - class AbstractSpeaker
-    
-        抽象音频播放接口。
-    - class PlaySoundSpeaker(AbstractSpeaker)
-    
-        基于playsound的音频播放接口
+     - BaseSpeaker.py
+        - class AbstractSpeaker
+        
+            抽象音频播放接口。
+        - class PlaySoundSpeaker(AbstractSpeaker)
+        
+            基于playsound的音频播放接口
+- 实现的API接口
+    - PlaySoundSpeaker
+    - ArmRobot
  - test.py
  
     基于SimpleRobot的简单测试示例程序。

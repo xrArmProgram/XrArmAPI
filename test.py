@@ -1,5 +1,6 @@
 from time import sleep, time
 
+from BASE.BaseRobot import SimpleRobot
 from API.ArmRobot import ArmRobot
 import xrarm_audio
 
