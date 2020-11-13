@@ -1,8 +1,8 @@
 from threading import Lock, Thread
 import rospy
 
-from BASE.BaseRobot import AbstractRobot
-from BASE.BaseSpeaker import PlaySoundSpeaker
+from API.BASE import AbstractRobot
+from API.PlaySoundSpeaker import PlaySoundSpeaker
 
 lock = Lock()
 

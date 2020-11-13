@@ -2,7 +2,7 @@ from threading import Thread, Lock
 from playsound import playsound
 
 
-from BASE.BaseSpeaker import AbstractSpeaker
+from API.BASE import AbstractSpeaker
 
 
 class PlaySoundSpeaker(AbstractSpeaker):
