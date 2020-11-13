@@ -14,18 +14,21 @@ class Voice(AbstractVoice):
             raise ValueError
 
         self.__ser = serial.Serial(comes, board)
-        self.__VOICE_MOD = None
         self.__slave_conn = slave_conn
+
+        self.__VOICE_MOD = None
         self.__back_msg = None
+
         self.__read_list = []
         self.__write_list = []
+
         self.__data_is_update = False
         self.__KEEP_RUNNING = True
 
+    # start to recv data from serial
     def run(self):
         self.__read_list.append(self.__ser)
         self.__read_list.append(self.__slave_conn)
-
         self.__write_list.append(self.__slave_conn)
 
         while self.__KEEP_RUNNING:

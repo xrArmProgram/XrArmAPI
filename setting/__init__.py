@@ -1,2 +1,2 @@
 from setting import *
-from channel2fountion import *
+from channel2function import *
