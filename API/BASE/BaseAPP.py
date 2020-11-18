@@ -29,3 +29,14 @@ class BaseApp(AbstractApp):
 
     def is_running(self):
         return self.__app_is_running
+
+
+class CycleRepetitionError(Exception):
+    def __str__(self):
+        print("Cycle Repetition Error,Do not run loop repeatedly")
+
+
+def only_run_once(running_flag):
+    if running_flag:
+        raise
+

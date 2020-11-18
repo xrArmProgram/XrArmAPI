@@ -13,11 +13,14 @@ class Voice(AbstractVoice):
             print("local_pipe is need but not given")
             raise ValueError
 
-        self.__ser = serial.Serial(comes, board)
         self.__slave_conn = slave_conn
 
         self.__VOICE_MOD = None
         self.__back_msg = None
+
+        self.__ser = None
+        self.__comes = comes
+        self.__board = board
 
         self.__read_list = []
         self.__write_list = []
@@ -25,8 +28,14 @@ class Voice(AbstractVoice):
         self.__data_is_update = False
         self.__KEEP_RUNNING = True
 
+    def init(self):
+        self.__ser = serial.Serial(self.__comes, self.__board)
+
     # start to recv data from serial
     def run(self):
+        if self.__ser is None:
+            raise RuntimeError("You should call init before calling run.")
+
         self.__read_list.append(self.__ser)
         self.__read_list.append(self.__slave_conn)
         self.__write_list.append(self.__slave_conn)

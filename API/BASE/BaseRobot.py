@@ -3,6 +3,8 @@ from time import sleep
 import threading
 from collections import Iterable
 
+from API.BASE import CycleRepetitionError
+
 
 class AbstractRobot:
     """Abstract class of manipulator, which defines the basic operation interface of manipulator."""
@@ -50,11 +52,6 @@ class AbstractRobot:
         pass
 
 
-class CycleRepetitionError(Exception):
-    def __str__(self):
-        print("Cycle Repetition Error,Do not run loop repeatedly")
-
-
 class SimpleRobot(AbstractRobot):
     """A simple example class"""
 
@@ -75,7 +72,7 @@ class SimpleRobot(AbstractRobot):
 
     def update(self, angle):
         # Data validity detection
-        if not (angle, Iterable):
+        if not isinstance(angle, Iterable):
             print("{} is required, but the input is {}".format(type(Iterable), type(angle), ))
             raise TypeError(angle)
 

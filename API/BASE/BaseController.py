@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AbstractVoice:
+class AbstractController:
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -11,8 +11,3 @@ class AbstractVoice:
     @abstractmethod
     def stop(self):
         pass
-
-    @abstractmethod
-    def init(self):
-        pass
-

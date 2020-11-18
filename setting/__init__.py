@@ -1,2 +1,2 @@
-from setting import *
-from channel2function import *
+from voice_config import *
+from channel2function import channels
