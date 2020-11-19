@@ -1,4 +1,4 @@
-"""some config for program"""
+"""some config for voice"""
 
 
 VOICE_MOD_SET = {
