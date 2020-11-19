@@ -7,7 +7,7 @@ from API.BASE import AbstractVoice
 from setting import VOICE_MOD_SET, RECV_LEN
 
 
-class Voice(AbstractVoice):
+class SNRVoice(AbstractVoice):
     def __init__(self, comes, board=9600, slave_conn=None):
         if not slave_conn:
             print("local_pipe is need but not given")

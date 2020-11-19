@@ -8,7 +8,7 @@ from geometry_msgs.msg import Pose
 from sensor_msgs.msg import JointState
 
 from API.BASE import AbstractRobot, BaseSingleton4py2
-from API.BASE import CycleRepetitionError
+from API.BASE import OperationRepetitionError
 from API.PlaySoundSpeaker import PlaySoundSpeaker
 from CAPI import MoveMK2ik
 
@@ -32,6 +32,7 @@ class ArmRobot(AbstractRobot, BaseSingleton4py2):
         # config ros node
         self.__node_name = node_name
         self.__anonymous = anonymous
+        self.__using_external_ros_handle = True
 
         # set running flag
         self.__is_run = False
@@ -69,21 +70,32 @@ class ArmRobot(AbstractRobot, BaseSingleton4py2):
                                    anonymous=self.__anonymous,
                                    disable_signals=True)
 
+            self.__using_external_ros_handle = False
+
         # initialize the arm planner
         self.__XrIK = MoveMK2ik()
 
     def loop(self):
         if self.__is_run:
-            raise CycleRepetitionError
+            raise OperationRepetitionError
+
+        if self.__using_external_ros_handle:
+            return None
 
         # handle ros event
         self.__is_run = True
         self.__rospy.spin()
 
     def loop_start(self):
+        if self.__using_external_ros_handle:
+            return None
+
         self.__loop_thread.start()
 
     def loop_stop(self):
+        if self.__using_external_ros_handle:
+            return None
+
         rospy.signal_shutdown("user stopped controller")
         self.__loop_thread.join()
         print("ros end")

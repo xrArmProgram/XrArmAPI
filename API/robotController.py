@@ -1,15 +1,17 @@
+from json import loads
 from threading import Thread
-
+from time import sleep
 
 from BASE.BaseController import AbstractController
-from setting import channels
+from setting import channels, sys_channel
 from API.BASE import BaseSingleton4py2
 from API.BASE import only_run_once
 
 
 class RobotController(AbstractController, BaseSingleton4py2):
-    def __init__(self, robot, channel_select_pipe):
+    def __init__(self, local_rospy, robot, channel_select_pipe):
         self.__robot = robot
+        self.__rospy = local_rospy
         self.__channel_select_pipe = channel_select_pipe
         self.__channel = channels['channel1']
 
@@ -17,7 +19,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         self.__task = None
         self.__controller_is_running = False
 
-    def build_function(self):
+    def __build_function(self):
         # if input not a class, do nothing
         if type(self.__channel["functional_class"]).__name__ == 'classobj':
             self.__function = self.__channel["functional_class"](self.__robot)
@@ -32,7 +34,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         while self.__controller_is_running:
             self.__main()
 
-    def run_in_coroutine(self):
+    def run_iterable(self):
         only_run_once(self.__controller_is_running)
 
         # start controller
@@ -43,39 +45,47 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     def __main(self):
         # get channel_select_msg from a pipe and select channel
-        channel_select_msg = self.read_channel_msg_from_pipe()
+        channel_select_msg = self.__read_channel_msg_from_pipe()
         if channel_select_msg is None:
             return None
 
-        self.channel_select(channel_select_msg)
+        self.__channel_select(channel_select_msg)
 
     def stop(self):
         # stop controller
         self.__controller_is_running = False
 
-    def read_channel_msg_from_pipe(self):
+    def __read_channel_msg_from_pipe(self):
         # Non blocking read pipe.(It's actually a wait timeout)
         if self.__channel_select_pipe.poll(1):
-            return self.__channel_select_pipe.recv()
+            sleep(0.05)
+            data = loads(self.__channel_select_pipe.recv())
+            if "voice_mode" in data:
+                return data["voice_mode"]
         return None
 
     # select channel by channel dictionaries
-    def channel_select(self, channel):
+    def __channel_select(self, channel):
         if channel in channels:
             # Prevent repeat operation function
             if self.__channel is channels[channel]:
                 return None
 
-            for command in self.__channel['command']:
+            for command in channels[channel]['command']:
                 if callable(command):
-                    command(robot=self.__robot,
-                            last_channel=self.__channel)
+                    command(local_rospy=self.__rospy,
+                            robot=self.__robot,
+                            last_function=self.__function)
+
+            if channel in sys_channel:
+                return None
 
             self.__channel = channels[channel]
-            self.build_function()
+            self.__build_function()
 
         else:
             for command in channels["channel_not_found"]['command']:
                 if callable(command):
-                    command(robot=self.__robot,
+                    command(local_rospy=self.__rospy,
+                            robot=self.__robot,
                             last_function=self.__function)

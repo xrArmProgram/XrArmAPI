@@ -31,9 +31,9 @@ class BaseApp(AbstractApp):
         return self.__app_is_running
 
 
-class CycleRepetitionError(Exception):
+class OperationRepetitionError(Exception):
     def __str__(self):
-        print("Cycle Repetition Error,Do not run loop repeatedly")
+        print("Operation Repetition Error,Do not Operation this function repeatedly")
 
 
 def only_run_once(running_flag):

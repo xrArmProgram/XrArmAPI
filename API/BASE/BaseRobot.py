@@ -3,7 +3,7 @@ from time import sleep
 import threading
 from collections import Iterable
 
-from API.BASE import CycleRepetitionError
+from BaseAPP import OperationRepetitionError
 
 
 class AbstractRobot:
@@ -89,7 +89,7 @@ class SimpleRobot(AbstractRobot):
     def loop(self):
         # If the user runs the loop repeatedly, an exception is thrown
         if self.__is_run:
-            raise CycleRepetitionError
+            raise OperationRepetitionError
 
         self.__is_run = True
 

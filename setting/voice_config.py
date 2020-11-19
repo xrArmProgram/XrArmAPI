@@ -2,7 +2,7 @@
 
 
 VOICE_MOD_SET = {
-    '\x01': "channel1",
+    '\x01': "active_channel",
     '\x02': "channel2",
     '\x03': "channel3",
     '\x04': "channel4",

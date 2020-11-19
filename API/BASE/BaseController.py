@@ -11,3 +11,7 @@ class AbstractController:
     @abstractmethod
     def stop(self):
         pass
+
+    @abstractmethod
+    def run_iterable(self):
+        pass
