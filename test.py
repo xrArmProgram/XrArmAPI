@@ -9,6 +9,7 @@ from API.BASE import BaseApp, SimpleRobot
 from API import SNRVoice, ArmRobot, PlaySoundSpeaker
 import xrarm_audio
 from API import RobotController, ArmBuilder
+from sample import DetectorColor
 
 
 def pipe_io(local_app, master_pipe):
@@ -19,8 +20,8 @@ def pipe_io(local_app, master_pipe):
 
 
 # robot = SimpleRobot("test_robot_node")
-# speaker = PlaySoundSpeaker()
-# robot = ArmRobot("test_robot_node", local_rospy=rospy, speaker=speaker)
+speaker = PlaySoundSpeaker()
+robot = ArmRobot("test_robot_node", local_rospy=rospy, speaker=speaker)
 #
 # master_conn, slave_conn = Pipe()
 
@@ -85,6 +86,9 @@ def pipe_io(local_app, master_pipe):
 #     print_exc(e)
 #
 # robot.loop_stop()
+
+color_find = DetectorColor(robot)
+color_find.run()
 
 
 

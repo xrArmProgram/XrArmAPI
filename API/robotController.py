@@ -21,9 +21,9 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     def __build_function(self):
         # if input not a class, do nothing
-        if type(self.__channel["functional_class"]).__name__ == 'classobj':
+        if type(self.__channel["functional_class"]).__name__ == 'type':
             self.__function = self.__channel["functional_class"](self.__robot)
-            self.__task = Thread(target=self.__function.run())
+            self.__task = Thread(target=self.__function.run)
             self.__task.start()
 
     def run(self):
@@ -54,6 +54,8 @@ class RobotController(AbstractController, BaseSingleton4py2):
     def stop(self):
         # stop controller
         self.__controller_is_running = False
+        if self.__function is not None:
+            self.__function.stop()
 
     def __read_channel_msg_from_pipe(self):
         # Non blocking read pipe.(It's actually a wait timeout)
@@ -66,12 +68,17 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     # select channel by channel dictionaries
     def __channel_select(self, channel):
+        # print(channel)
+
         if channel in channels:
             # Prevent repeat operation function
             if self.__channel is channels[channel]:
                 return None
 
             for command in channels[channel]['command']:
+                # print(command)
+                # print(self.__function)
+
                 if callable(command):
                     command(local_rospy=self.__rospy,
                             robot=self.__robot,

@@ -4,7 +4,7 @@ import select
 from json import dumps
 
 from API.BASE import AbstractVoice
-from setting import VOICE_MOD_SET, RECV_LEN
+from setting import VOICE_MOD_SET, RECV_LEN, SNR8051_CONFIG
 
 
 class SNRVoice(AbstractVoice):
@@ -55,10 +55,19 @@ class SNRVoice(AbstractVoice):
                     # read data from serial
                     sleep(0.05)
                     n = read.inWaiting()
-                    my_out = read.read(n)
+                    temp_str = read.read(n)
+                    voice_out = []
+                    # trans data to hex_str
+                    for i in range(len(temp_str)):
+                        hex_char = hex(ord(temp_str[i]))
+                        if len(hex_char) == 3:
+                            hex_char = "0x0" + hex_char[-1]
+
+                        voice_out.append(hex_char)
+                    # print(my_out)
 
                     # channel select
-                    result = self.__get_voice(my_out)
+                    result = self.__get_voice(voice_out)
                     if result is None:
                         continue
 
@@ -85,16 +94,19 @@ class SNRVoice(AbstractVoice):
     # translate data from serial
     @staticmethod
     def __get_voice(data):
-        if len(data) < RECV_LEN:
+        if len(data) < SNR8051_CONFIG["RECV_LEN"]:
             return None
 
-        if data[0] == "\xff" and data[len(data) - 1] == "\xff":
-            buf = []
-            for i in range(1, 4):
-                buf.append(data[i])
+        if data[0] == SNR8051_CONFIG["head"] and data[len(data) - 1] == SNR8051_CONFIG["tail"]:
+            is_verify = True
+            for index, value in SNR8051_CONFIG["special"]:
+                if data[index-1] != value:
+                    is_verify = False
 
-            if buf[0] == "\xf5" and buf[1] == "\x01":
-                if buf[2] in VOICE_MOD_SET:
-                    return VOICE_MOD_SET[buf[2]]
+            if is_verify:
+                mode_flag = data[SNR8051_CONFIG["data_pose"]-1]
+
+                if mode_flag in VOICE_MOD_SET:
+                    return VOICE_MOD_SET[mode_flag]
 
         return None

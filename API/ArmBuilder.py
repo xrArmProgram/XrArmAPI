@@ -71,11 +71,13 @@ class ArmBuilder(AbstractBuilder):
         return self.__controller.run_iterable()
 
     def destroy(self):
+        """Release all resources"""
         print("start destroy")
         self.__controller.stop()
         self.__robot.loop_stop()
         self.__voice.stop()
         print("stop dev")
+
         if not rospy.is_shutdown():
             rospy.signal_shutdown("user stop it")
             print("stop ros")

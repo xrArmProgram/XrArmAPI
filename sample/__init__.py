@@ -1,0 +1,1 @@
+from color_recognition.color import DetectorColor
