@@ -8,18 +8,22 @@ from BASE import AbstractBuilder
 
 
 class ArmBuilder(AbstractBuilder):
-    def __init__(self, controller_class, robot_class, speaker_class, voice_class, voice_dev, voice_board):
+    def __init__(self, controller_class, robot_class, speaker_class, voice_class, voice_dev,
+                 voice_board, sound_player_class=None):
+
         self.__robot_class = robot_class
         self.__speaker_class = speaker_class
         self.__voice_class = voice_class
         self.__voice_dev = voice_dev
         self.__voice_board = voice_board
         self.__controller_class = controller_class
+        self.__sound_player_class = sound_player_class
 
         self.__robot = None
         self.__voice = None
         self.__speaker = None
         self.__controller = None
+        self.__sound_player = None
 
         self.__ros_spin_thread = None
         self.__voice_run_thread = None
@@ -30,7 +34,13 @@ class ArmBuilder(AbstractBuilder):
         if self.__is_Built:
             raise OperationRepetitionError
 
-        self.__speaker = self.__speaker_class()
+        if self.__sound_player_class is None:
+            self.__speaker = self.__speaker_class()
+
+        else:
+            self.__sound_player = self.__sound_player_class()
+            self.__sound_player.init()
+            self.__speaker = self.__speaker_class(sound_player=self.__sound_player.playsound)
 
         # Initialize ros node
         rospy.init_node(name="robot_controller",
@@ -73,6 +83,7 @@ class ArmBuilder(AbstractBuilder):
     def destroy(self):
         """Release all resources"""
         print("start destroy")
+        self.__sound_player.stop()
         self.__controller.stop()
         self.__robot.loop_stop()
         self.__voice.stop()

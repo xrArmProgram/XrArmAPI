@@ -20,7 +20,7 @@ class DetectorColor(object):
         self.__color = None
         self.__color_count = 0
 
-        self.__cap = cv2.VideoCapture(2)
+        self.__cap = cv2.VideoCapture(0)
         self.__cap.set(3, 480)
         self.__cap.set(4, 640)
 

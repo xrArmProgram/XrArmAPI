@@ -1,5 +1,6 @@
 from ArmRobot import ArmRobot
-from PlaySoundSpeaker import PlaySoundSpeaker
+from SoundSpeaker import SoundSpeaker
 from SNRVoice import SNRVoice
 from robotController import RobotController
 from ArmBuilder import ArmBuilder
+from PyAudioSoundPlayer import PyAudioPlayer

@@ -59,4 +59,16 @@ channels = {
     },
 }
 
-sys_channel = ["channel_stop", "active_channel", "channel_select"]
+
+sys_channel = ["channel_stop", "active_channel", "step_back"]
+select_channel = "channel_select"
+
+# custom channel define
+custom_channel = ["channel{}".format(i) for i in xrange(12, 21)]
+
+channels.update({
+    "channel12": {
+        "functional_class": None,
+        "command": [controller_commands['say_hello']],
+    }})
+

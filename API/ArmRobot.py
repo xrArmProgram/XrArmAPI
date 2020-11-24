@@ -9,7 +9,7 @@ from sensor_msgs.msg import JointState
 
 from API.BASE import AbstractRobot, BaseSingleton4py2
 from API.BASE import OperationRepetitionError
-from API.PlaySoundSpeaker import PlaySoundSpeaker
+from API.SoundSpeaker import SoundSpeaker
 from CAPI import MoveMK2ik
 
 lock = Lock()
@@ -25,7 +25,7 @@ class ArmRobot(AbstractRobot, BaseSingleton4py2):
         # set speaker
         self.speaker = speaker
         if speaker is None:
-            self.speaker = PlaySoundSpeaker()
+            self.speaker = SoundSpeaker()
         else:
             self.speaker = speaker
 

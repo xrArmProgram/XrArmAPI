@@ -5,11 +5,12 @@ from playsound import playsound
 from API.BASE import AbstractSpeaker
 
 
-class PlaySoundSpeaker(AbstractSpeaker):
-    def __init__(self):
+class SoundSpeaker(AbstractSpeaker):
+    def __init__(self, sound_player=playsound):
         self.__audio_list = []
         self.__is_playing = False
         self.lock = Lock()
+        self.__sound_player = sound_player
 
         # self.__play_thread = Thread(target=self.__play_sound)
         self.__play_thread = None
@@ -44,7 +45,7 @@ class PlaySoundSpeaker(AbstractSpeaker):
                 return None
 
         # Blocking execution
-        playsound(audio_file)
+        self.__sound_player(audio_file)
         self.lock.release()
 
     def __play_sound(self):
@@ -52,7 +53,7 @@ class PlaySoundSpeaker(AbstractSpeaker):
 
         # play all sound in audio list
         while len(self.__audio_list) > 0:
-            playsound(self.__audio_list.pop(0))
+            self.__sound_player(self.__audio_list.pop(0))
 
             # Reading __is_playing is not allowed when __is_playing is modified
             with self.lock:

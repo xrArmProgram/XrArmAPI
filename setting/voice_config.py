@@ -27,12 +27,10 @@ VOICE_MOD_SET = {
 
 RECV_LEN = 4
 
-SNR8051_CONFIG = {
+SNR_PROTOCOL_CONFIG = {
     "RECV_LEN": 4,
     "head": '0xf4',
     'tail': '0xff',
     'data_pose': 3,
-    'special': [
-        (2, '0x06'),
-    ],
+    'special': [(2, '0x06'), ],
 }

@@ -1,11 +1,12 @@
 from json import loads
 from threading import Thread
-from time import sleep
+from time import sleep, time
 
 from BASE.BaseController import AbstractController
 from setting import channels, sys_channel
 from API.BASE import BaseSingleton4py2
 from API.BASE import only_run_once
+from setting.channel2function import select_channel, custom_channel
 
 
 class RobotController(AbstractController, BaseSingleton4py2):
@@ -18,6 +19,8 @@ class RobotController(AbstractController, BaseSingleton4py2):
         self.__function = None
         self.__task = None
         self.__controller_is_running = False
+        self.__in_custom_function_select = False
+        self.__run_time_flag = time()
 
     def __build_function(self):
         # if input not a class, do nothing
@@ -45,6 +48,12 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     def __main(self):
         # get channel_select_msg from a pipe and select channel
+        if not self.__in_custom_function_select:
+            self.__run_time_flag = time()
+        else:
+            if time() - self.__run_time_flag > 10:
+                self.__in_custom_function_select = False
+
         channel_select_msg = self.__read_channel_msg_from_pipe()
         if channel_select_msg is None:
             return None
@@ -68,7 +77,12 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     # select channel by channel dictionaries
     def __channel_select(self, channel):
-        # print(channel)
+        if self.__in_custom_function_select:
+            if channel not in custom_channel:
+                return None
+        else:
+            if channel in custom_channel:
+                return None
 
         if channel in channels:
             # Prevent repeat operation function
@@ -76,9 +90,6 @@ class RobotController(AbstractController, BaseSingleton4py2):
                 return None
 
             for command in channels[channel]['command']:
-                # print(command)
-                # print(self.__function)
-
                 if callable(command):
                     command(local_rospy=self.__rospy,
                             robot=self.__robot,
@@ -87,8 +98,13 @@ class RobotController(AbstractController, BaseSingleton4py2):
             if channel in sys_channel:
                 return None
 
+            if channel == select_channel:
+                self.__in_custom_function_select = True
+                return None
+
             self.__channel = channels[channel]
             self.__build_function()
+            self.__in_custom_function_select = False
 
         else:
             for command in channels["channel_not_found"]['command']:
