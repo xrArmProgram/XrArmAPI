@@ -3,36 +3,45 @@ from setting.conroller_commands import controller_commands
 from sample import DetectorColor
 
 channels = {
-    "channel1": {
+    "default_channel": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },
-
-    "channel2": {
+    "control_model": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },
-    "channel3": {
+    "learning_model": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },
-    "channel4": {
+    "operation_action": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },
-    "channel5": {
+    "visual_grabbing": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },
-    "channel7": {
+    "color_recognition": {
         "functional_class": DetectorColor,
-        "command": [controller_commands['say_hello']],
+        "command": [
+            controller_commands['exit_function'],
+            controller_commands['say_hello'],
+        ],
     },
-    "channel8": {
+    "shape_recognition": {
+        "functional_class": None,
+        "command": [
+            controller_commands['exit_function'],
+            controller_commands['say_hello'],
+        ],
+    },
+    "face_following": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },
-    "channel9": {
+    "sorting_mode": {
         "functional_class": None,
         "command": [controller_commands['say_hello']],
     },

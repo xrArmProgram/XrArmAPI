@@ -14,7 +14,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         self.__robot = robot
         self.__rospy = local_rospy
         self.__channel_select_pipe = channel_select_pipe
-        self.__channel = channels['channel1']
+        self.__channel = channels['default_channel']
 
         self.__function = None
         self.__task = None
