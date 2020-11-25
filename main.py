@@ -20,7 +20,7 @@ while True:
 
     except KeyboardInterrupt as e:
         print_exc(e)
-        print("got error")
+        # print("got error")
 
 builder.destroy()
 

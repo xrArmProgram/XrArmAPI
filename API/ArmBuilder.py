@@ -61,7 +61,8 @@ class ArmBuilder(AbstractBuilder):
         self.__voice_run_thread = Thread(target=self.__voice.run)
 
         # controller API
-        self.__controller = self.__controller_class(local_rospy=rospy, robot=self.__robot, channel_select_pipe=master_pipe)
+        self.__controller = self.__controller_class(local_rospy=rospy, robot=self.__robot,
+                                                    channel_select_pipe=master_pipe)
 
         self.__is_Built = True
 

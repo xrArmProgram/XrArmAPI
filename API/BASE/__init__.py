@@ -4,6 +4,7 @@ from BaseVoice import AbstractVoice
 from BaseSpeaker import AbstractSpeaker
 from BaseAPP import AbstractApp
 from BaseAPP import BaseApp
+from BaseAPP import AbstractRunner
 from BaseSingleton import BaseSingleton4py2
 from BaseAPP import OperationRepetitionError
 from BaseAPP import only_run_once

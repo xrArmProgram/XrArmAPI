@@ -1,1 +1,3 @@
 from color_recognition.color import DetectorColor
+from color_recognition.shape import CameraMotion
+from face_following.face_follow import FaceFollower

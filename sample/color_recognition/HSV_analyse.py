@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import numpy as np
 import cv2
 
@@ -10,7 +12,7 @@ def nothing(x):
 # 将BGR图像转化为HSV图像
 win_img = "new"
 win_img_old = "old"
-#pic = cv2.imread("pic.png", cv2.IMREAD_UNCHANGED)  # 自己想要分析的照片
+# pic = cv2.imread("pic.png", cv2.IMREAD_UNCHANGED)  # 自己想要分析的照片
 pic = cv2.imread("pic.png")  # 自己想要分析的照片
 pic1 = cv2.cvtColor(pic, cv2.COLOR_BGR2HSV)
 

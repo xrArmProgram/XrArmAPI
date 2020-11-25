@@ -4,9 +4,9 @@ from time import sleep, time
 
 from BASE.BaseController import AbstractController
 from setting import channels, sys_channel
-from API.BASE import BaseSingleton4py2
+from API.BASE import BaseSingleton4py2, AbstractRunner
 from API.BASE import only_run_once
-from setting.channel2function import select_channel, custom_channel
+from setting.channel2function import select_channel, custom_channel, exit_channel
 
 
 class RobotController(AbstractController, BaseSingleton4py2):
@@ -24,8 +24,9 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     def __build_function(self):
         # if input not a class, do nothing
-        if type(self.__channel["functional_class"]).__name__ == 'type':
-            self.__function = self.__channel["functional_class"](self.__robot)
+        local_function_class = self.__channel["functional_class"]
+        if local_function_class is not None and issubclass(local_function_class, AbstractRunner):
+            self.__function = local_function_class(self.__robot)
             self.__task = Thread(target=self.__function.run)
             self.__task.start()
 
@@ -51,7 +52,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         if not self.__in_custom_function_select:
             self.__run_time_flag = time()
         else:
-            if time() - self.__run_time_flag > 10:
+            if time() - self.__run_time_flag > 15:
                 self.__in_custom_function_select = False
 
         channel_select_msg = self.__read_channel_msg_from_pipe()
@@ -77,11 +78,8 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     # select channel by channel dictionaries
     def __channel_select(self, channel):
-        if self.__in_custom_function_select:
-            if channel not in custom_channel:
-                return None
-        else:
-            if channel in custom_channel:
+        if not self.__in_custom_function_select:
+            if channel not in sys_channel:
                 return None
 
         if channel in channels:
@@ -95,11 +93,13 @@ class RobotController(AbstractController, BaseSingleton4py2):
                             robot=self.__robot,
                             last_function=self.__function)
 
-            if channel in sys_channel:
-                return None
-
             if channel == select_channel:
                 self.__in_custom_function_select = True
+
+            elif channel == exit_channel:
+                self.__channel = channels['default_channel']
+
+            if channel in sys_channel:
                 return None
 
             self.__channel = channels[channel]

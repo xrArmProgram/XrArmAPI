@@ -4,17 +4,12 @@
 import cv2
 from time import sleep
 
-import imutils
-
+from API.BASE import AbstractRunner
 from config import color_recognition_sensitivity, empty_sensitivity, color_low_sensitivity
 from xrarm_audio import color_sound
 
-# cap = cv2.VideoCapture(0)
-# ## Read
-# img = cv2.imread("D:/deng/ppp/3.png")
 
-
-class DetectorColor(object):
+class DetectorColor(AbstractRunner):
     def __init__(self, robot):
         self.__robot = robot
         self.__color = None

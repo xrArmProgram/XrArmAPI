@@ -1,6 +1,6 @@
 from setting.conroller_commands import controller_commands
 
-from sample import DetectorColor
+from sample import DetectorColor, CameraMotion, FaceFollower
 
 channels = {
     "default_channel": {
@@ -31,15 +31,18 @@ channels = {
         ],
     },
     "shape_recognition": {
-        "functional_class": None,
+        "functional_class": CameraMotion,
         "command": [
             controller_commands['exit_function'],
             controller_commands['say_hello'],
         ],
     },
     "face_following": {
-        "functional_class": None,
-        "command": [controller_commands['say_hello']],
+        "functional_class": FaceFollower,
+        "command": [
+            controller_commands['exit_function'],
+            controller_commands['say_hello'],
+        ],
     },
     "sorting_mode": {
         "functional_class": None,
@@ -69,8 +72,9 @@ channels = {
 }
 
 
-sys_channel = ["channel_stop", "active_channel", "step_back"]
 select_channel = "channel_select"
+exit_channel = "exit_function"
+sys_channel = [exit_channel, "active_channel", "step_back", select_channel]
 
 # custom channel define
 custom_channel = ["channel{}".format(i) for i in xrange(12, 21)]

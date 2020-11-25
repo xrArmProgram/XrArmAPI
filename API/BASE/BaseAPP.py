@@ -17,6 +17,18 @@ class AbstractApp(object):
         pass
 
 
+class AbstractRunner:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def run(self):
+        pass
+    
+    @abstractmethod
+    def stop(self):
+        pass
+
+
 class BaseApp(AbstractApp):
     def __init__(self):
         self.__app_is_running = False
