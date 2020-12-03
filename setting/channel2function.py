@@ -1,8 +1,8 @@
 from sample.object_sorting.ObjectSorting import ObjectSorting
 from setting.conroller_commands import controller_commands
 
-from sample import DetectorColor, CameraMotion, FaceFollower, BasicControlMode, LearningMode, VisualGrabbingMode, \
-    ActionMode
+from sample import DetectorColor, FaceFollower, BasicControlMode, LearningMode, VisualGrabbingMode, \
+    ActionMode, ShapeAnalysis
 
 channels = {
     "default_channel": {
@@ -45,7 +45,7 @@ channels = {
         ],
     },
     "shape_recognition": {
-        "functional_class": CameraMotion,
+        "functional_class": ShapeAnalysis,
         "command": [
             controller_commands['exit_function'],
             controller_commands['say_hello'],

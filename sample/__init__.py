@@ -1,5 +1,6 @@
 from color_recognition.color import DetectorColor
-from color_recognition.shape import CameraMotion
+# from color_recognition.shape import CameraMotion
+from color_recognition.ShapeAnalysis import ShapeAnalysis
 from face_following.face_follow import FaceFollower
 from ros_sample.mode_selection import ActionMode
 from ros_sample.mode_selection import BasicControlMode

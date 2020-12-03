@@ -14,17 +14,18 @@ class CameraMotion(AbstractRunner):
         self.__cap = cv2.VideoCapture(0)
         self.__cap.set(3, 480)  # 设置画面宽度
         self.__cap.set(4, 640)  # 设置画面长度
-        self.__color_dist = {'blue': {
-            'Lower': np.array([156, 128, 46]),
-            'Upper': np.array([180, 255, 255]),
-        },
+        self.__color_dist = {
+            'blue': {
+                'Lower': np.array([156, 128, 46]),
+                'Upper': np.array([180, 255, 255]),
+            },
             'green': {
                 'Lower': np.array([100, 80, 46]),
-                'Upper': np.array([124, 255, 255])
+                'Upper': np.array([124, 255, 255]),
             },
             'red': {
                 'Lower': np.array([35, 43, 35]),
-                'Upper': np.array([90, 255, 255])
+                'Upper': np.array([90, 255, 255]),
             },
         }
         self.__idx_dist = ['red', 'blue', 'green']  # 颜色List
