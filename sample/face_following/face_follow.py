@@ -20,7 +20,7 @@ from xr_pid import PID
 
 
 class FaceFollower(AbstractRunner):
-    def __init__(self, robot):
+    def __init__(self, robot, local_rospy):
         self.__X_pid = PID(0.03, 0.09, 0.0005)  # 实例化一个X轴坐标的PID算法PID参数：第一个代表pid的P值，二代表I值,三代表D值
         self.__X_pid.setSampleTime(0.005)  # 设置PID算法的周期
         self.__X_pid.setPoint(160)  # 设置PID算法的预值点，即目标值，这里160指的是屏幕框的x轴中心点，x轴的像素是320，一半是160
@@ -65,7 +65,7 @@ class FaceFollower(AbstractRunner):
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 要先将每一帧先转换成灰度图，在灰度图中进行查找
                 faces = self.__face_cascade.detectMultiScale(gray)  # 查找人脸
                 if len(faces) > 0:  # 当视频中有人脸轮廓时
-                    print('face found!')
+                    # print('face found!')
                     for (x, y, w, h) in faces:
                         # 参数分别是“目标帧”，“矩形”，“矩形大小”，“线条颜色”，“宽度”
                         cv2.rectangle(frame, (x, y), (x + h, y + w), (0, 255, 0), 2)
@@ -100,6 +100,12 @@ class FaceFollower(AbstractRunner):
 
                         # servo.set(servo_X, angle_X)  # 设置X轴舵机
                         # servo.set(servo_Y, angle_Y)  # 设置Y轴舵机
+                        print("__angle_X: {}, __angle_Y: {}".format(self.__angle_X, self.__angle_Y))
+                        servo = self.__robot.read()
+                        servo[self.__servo_X] = (self.__angle_X - 90) / 180.0 * math.pi
+                        servo[self.__servo_Y] = self.__angle_Y / 180.0 * math.pi - 0.89
+
+                        self.__robot.update(servo)
 
                 cv2.imshow("capture", frame)  # 显示图像
                 if cv2.waitKey(1) & 0xff == ord('q'):  # 当按键按下q键时退出

@@ -1,19 +1,21 @@
 # coding: utf-8
 
+
 import cv2
 import numpy as np
-import threading
-import time
+from time import sleep
 
 from API.BASE import AbstractRunner
+from sample.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose
 
 
-class CameraMotion(AbstractRunner):
+class ObjectSorting(AbstractRunner):
     def __init__(self, robot, local_rospy):
         self.__is_running = False
         self.__cap = cv2.VideoCapture(0)
         self.__cap.set(3, 480)  # 设置画面宽度
         self.__cap.set(4, 640)  # 设置画面长度
+        self.__robot = robot
         self.__color_dist = {'blue': {
             'Lower': np.array([156, 128, 46]),
             'Upper': np.array([180, 255, 255]),
@@ -31,6 +33,8 @@ class CameraMotion(AbstractRunner):
         self.__CNT = 10  # 设置识别率计算次数
         self.__rec_count = 0  # 自增值
         self.__precision = [0, 0, 0]  # 识别度存储
+
+        self.__color = None
 
     def analyse(self, frame, color_dict):
         dat = [0] * len(color_dict)  # 根据颜色长度定义数组
@@ -72,9 +76,8 @@ class CameraMotion(AbstractRunner):
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  # 文字显示方块中心点坐标
         return result
 
-    def run(self):
-        self.__is_running = True
-
+    def __get_color(self):
+        color_count = 0
         while self.__is_running:
             ret, frame = self.__cap.read()
             if ret:
@@ -88,9 +91,22 @@ class CameraMotion(AbstractRunner):
                     else:
                         idx = self.__precision.index(max(self.__precision))  # 最大值下标
                         # 打印识别颜色及识别度
-                        print("识别颜色为：%s,识别率为:%d" % (self.__idx_dist[idx], max(self.__precision) / self.__CNT))
+                        success = max(self.__precision) / self.__CNT > 0.5
+
+                        print("识别颜色为：{},识别率为:{}".format(self.__idx_dist[idx], success))
                         self.__precision = [0, 0, 0]  # 清空识别度
                         self.__rec_count = 0
+
+                        if self.__color != self.__idx_dist[idx] and success:
+                            self.__color = self.__idx_dist[idx]
+                            color_count = 0
+
+                        else:
+                            if self.__color is not None and success:
+                                color_count += 1
+
+                        if color_count > color_recognition_sensitivity:
+                            return self.__color
 
                     cv2.imshow('camera', frame)  # 显示窗口
                     if cv2.waitKey(1) == ord('q'):  # 当按键按下q键时退出
@@ -100,9 +116,32 @@ class CameraMotion(AbstractRunner):
             else:
                 print("无法读取摄像头！")
 
+        return None
+
+    def run(self):
+        self.__is_running = True
+        self.__robot.update(init_angle)
+        sleep(3)
+        while self.__is_running:
+            local_color = self.__get_color()
+            if local_color is None:
+                break
+
+            print("got it")
+            for angle in object_pose:
+                self.__robot.update(angle)
+                sleep(1)
+
+            # print("color: {}, pose: {}".format(local_color, color_pose[local_color]))
+
+            for angle in color_pose[local_color]:
+                self.__robot.update(angle)
+                sleep(1)
+
+            self.__robot.update(init_angle)
+
         self.__cap.release()
         cv2.destroyAllWindows()
 
     def stop(self):
         self.__is_running = False
-

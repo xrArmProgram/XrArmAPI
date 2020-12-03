@@ -26,7 +26,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         # if input not a class, do nothing
         local_function_class = self.__channel["functional_class"]
         if local_function_class is not None and issubclass(local_function_class, AbstractRunner):
-            self.__function = local_function_class(self.__robot)
+            self.__function = local_function_class(self.__robot, self.__rospy)
             self.__task = Thread(target=self.__function.run)
             self.__task.start()
 

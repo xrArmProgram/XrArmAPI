@@ -1,3 +1,7 @@
 from color_recognition.color import DetectorColor
 from color_recognition.shape import CameraMotion
 from face_following.face_follow import FaceFollower
+from ros_sample.mode_selection import ActionMode
+from ros_sample.mode_selection import BasicControlMode
+from ros_sample.mode_selection import LearningMode
+from ros_sample.mode_selection import VisualGrabbingMode

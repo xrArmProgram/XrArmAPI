@@ -3,7 +3,8 @@ from traceback import print_exc
 from API import ArmBuilder, RobotController, ArmRobot, SoundSpeaker, SNRVoice, PyAudioPlayer
 
 
-comes = "/dev/ttyUSB0"
+comes = "/dev/ttyUSB0" \
+        ""
 board = 9600
 
 builder = ArmBuilder(RobotController, ArmRobot, SoundSpeaker, SNRVoice, comes, board, PyAudioPlayer)
@@ -18,9 +19,11 @@ while True:
     except StopIteration:
         break
 
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt:
+        print("stop now")
+
+    except Exception as e:
         print_exc(e)
-        # print("got error")
 
 builder.destroy()
 

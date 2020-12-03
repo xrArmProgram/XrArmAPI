@@ -10,7 +10,7 @@ from xrarm_audio import color_sound
 
 
 class DetectorColor(AbstractRunner):
-    def __init__(self, robot):
+    def __init__(self, robot, local_rospy):
         self.__robot = robot
         self.__color = None
         self.__color_count = 0
