@@ -3,7 +3,7 @@ from traceback import print_exc
 from API import ArmBuilder, RobotController, ArmRobot, SoundSpeaker, SNRVoice, PyAudioPlayer
 
 
-comes = "/dev/ttyUSB0"
+comes = "/dev/xrvoice"
 board = 9600
 
 builder = ArmBuilder(RobotController, ArmRobot, SoundSpeaker, SNRVoice, comes, board, PyAudioPlayer)

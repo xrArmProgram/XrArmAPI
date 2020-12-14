@@ -143,5 +143,7 @@ class ObjectSorting(AbstractRunner):
         self.__cap.release()
         cv2.destroyAllWindows()
 
+        print("function end")
+
     def stop(self):
         self.__is_running = False
