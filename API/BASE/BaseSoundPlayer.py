@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AbstractSoundPlayer:
+class AbstractSoundPlayer(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod

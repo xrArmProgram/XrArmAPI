@@ -43,14 +43,14 @@ class ShapeAnalysis(object):
         self.__binary_max = cv2.getTrackbarPos('binaryMax', 'image')
         ret, binary = cv2.threshold(thresh, self.__binary_min, self.__binary_max, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         # ret, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)  # 转为二值图
-        # cv2.imshow("input image", frame)
+        # self.__robot.show("input image", frame)
 
         # contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         tmp_img, contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         draw_img = frame.copy()  # 复制原图
         # mask = cv2.drawContours(draw_img, contours, -1, (255, 255, 255), -1)  # 绘制轮廓，形成掩膜
         mask = cv2.drawContours(draw_img, contours, -1, (0, 0, 255), 2)  # 绘制轮廓，形成掩膜
-        cv2.imshow("image", mask)
+        self.__robot.show("image", mask)
 
         if contours:  # 确认检测到形状块
             for cnt in range(len(contours)):
@@ -94,7 +94,7 @@ class ShapeAnalysis(object):
 
                     print("shape_type:%s ----%s" % (shape_type, corners))
 
-    # cv2.imshow("input image", binary)
+    # self.__robot.show("input image", binary)
 
     def __draw_text_info(self, image):
         c1 = self.__shapes['triangle']

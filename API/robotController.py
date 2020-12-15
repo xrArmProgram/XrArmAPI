@@ -10,7 +10,7 @@ from setting.channel2function import select_channel, custom_channel, exit_channe
 
 
 class RobotController(AbstractController, BaseSingleton4py2):
-    def __init__(self, local_rospy, robot, channel_select_pipe):
+    def __init__(self, local_rospy, robot, channel_select_pipe, img_player=None):
         self.__robot = robot
         self.__rospy = local_rospy
         self.__channel_select_pipe = channel_select_pipe
@@ -21,6 +21,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         self.__controller_is_running = False
         self.__in_custom_function_select = False
         self.__run_time_flag = time()
+        self.__img_player = img_player
 
     def __build_function(self):
         # if input not a class, do nothing
@@ -35,16 +36,34 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
         # start controller
         self.__controller_is_running = True
-        while self.__controller_is_running:
+        img_player_not_stop = True
+
+        while self.__controller_is_running or img_player_not_stop:
             self.__main()
+            try:
+                self.__img_player.next()
+
+            except StopIteration:
+                img_player_not_stop = False
+                print("\033[33mImg player has been turned off.No more images can be displayed",)
 
     def run_iterable(self):
         only_run_once(self.__controller_is_running)
 
         # start controller
         self.__controller_is_running = True
-        while self.__controller_is_running:
+        img_player_not_stop = True
+
+        while self.__controller_is_running or img_player_not_stop:
             self.__main()
+
+            try:
+                self.__img_player.next()
+
+            except StopIteration:
+                img_player_not_stop = False
+                print("\033[33mImg player has been turned off.No more images can be displayed",)
+
             yield
 
     def __main(self):
@@ -69,8 +88,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
 
     def __read_channel_msg_from_pipe(self):
         # Non blocking read pipe.(It's actually a wait timeout)
-        if self.__channel_select_pipe.poll(1):
-            sleep(0.05)
+        if self.__channel_select_pipe.poll(0.01):
             data = loads(self.__channel_select_pipe.recv())
             if "voice_mode" in data:
                 return data["voice_mode"]

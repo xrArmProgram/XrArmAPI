@@ -6,7 +6,7 @@ from collections import Iterable
 from BaseAPP import OperationRepetitionError
 
 
-class AbstractRobot:
+class AbstractRobot(object):
     """Abstract class of manipulator, which defines the basic operation interface of manipulator."""
     __metaclass__ = ABCMeta
 

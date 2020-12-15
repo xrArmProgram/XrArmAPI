@@ -93,7 +93,7 @@ class CameraMotion(AbstractRunner):
                         self.__precision = [0, 0, 0]  # 清空识别度
                         self.__rec_count = 0
 
-                    cv2.imshow('camera', frame)  # 显示窗口
+                    self.__robot.show('camera', frame)  # 显示窗口
                     if cv2.waitKey(1) == ord('q'):  # 当按键按下q键时退出
                         break
                 else:

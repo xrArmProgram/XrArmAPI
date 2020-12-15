@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AbstractSpeaker:
+class AbstractSpeaker(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod

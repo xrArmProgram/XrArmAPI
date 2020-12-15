@@ -88,7 +88,7 @@ class DetectorColor(AbstractRunner):
 
                     # print("__color_count: ", self.__color_count, "and ", color_count, "empty_count: ", empty_count)
 
-                cv2.imshow("color", frame)
+                self.__robot.show("color", frame)
                 cv2.waitKey(10)
             else:
                 print("无法读取摄像头！")

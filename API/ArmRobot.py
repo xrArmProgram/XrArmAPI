@@ -18,7 +18,7 @@ lock = Lock()
 class ArmRobot(AbstractRobot, BaseSingleton4py2):
     """XR M1 arm robot controller"""
 
-    def __init__(self, node_name="xr_arm_controller", local_rospy=rospy, speaker=None, anonymous=True):
+    def __init__(self, node_name="xr_arm_controller", local_rospy=rospy, speaker=None, anonymous=True, img_player=None):
         # got rospy module
         self.__rospy = local_rospy
 
@@ -28,6 +28,8 @@ class ArmRobot(AbstractRobot, BaseSingleton4py2):
             self.speaker = SoundSpeaker()
         else:
             self.speaker = speaker
+
+        self.__img_player = img_player
 
         # config ros node
         self.__node_name = node_name
@@ -136,3 +138,6 @@ class ArmRobot(AbstractRobot, BaseSingleton4py2):
 
     def speak(self, audio_file, block=True):
         self.speaker.speak(audio_file, block)
+
+    def show(self, window_name, img):
+        self.__img_player.show(window_name, img)

@@ -1,17 +1,17 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AbstractController(object):
+class AbstractImgPlayer(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def run(self):
+    def show(self, img, window_name):
         pass
 
     @abstractmethod
-    def stop(self):
+    def async_play(self):
         pass
 
     @abstractmethod
-    def run_iterable(self):
+    def destroy(self):
         pass

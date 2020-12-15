@@ -11,3 +11,4 @@ from BaseAPP import only_run_once
 from BaseBuilder import AbstractBuilder
 from BaseBuilder import NotBuiltError
 from BaseSoundPlayer import AbstractSoundPlayer
+from BaseImgPlayer import AbstractImgPlayer

@@ -108,7 +108,7 @@ class ObjectSorting(AbstractRunner):
                         if color_count > color_recognition_sensitivity:
                             return self.__color
 
-                    cv2.imshow('camera', frame)  # 显示窗口
+                    self.__robot.show('camera', frame)  # 显示窗口
                     if cv2.waitKey(1) == ord('q'):  # 当按键按下q键时退出
                         break
                 else:

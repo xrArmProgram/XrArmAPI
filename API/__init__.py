@@ -4,3 +4,4 @@ from SNRVoice import SNRVoice
 from robotController import RobotController
 from ArmBuilder import ArmBuilder
 from PyAudioSoundPlayer import PyAudioPlayer
+from ImgPlayer import ImgPlayer

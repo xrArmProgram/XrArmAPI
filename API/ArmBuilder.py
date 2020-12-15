@@ -9,7 +9,7 @@ from BASE import AbstractBuilder
 
 class ArmBuilder(AbstractBuilder):
     def __init__(self, controller_class, robot_class, speaker_class, voice_class, voice_dev,
-                 voice_board, sound_player_class=None):
+                 voice_board, img_player_class, sound_player_class=None):
 
         self.__robot_class = robot_class
         self.__speaker_class = speaker_class
@@ -18,12 +18,15 @@ class ArmBuilder(AbstractBuilder):
         self.__voice_board = voice_board
         self.__controller_class = controller_class
         self.__sound_player_class = sound_player_class
+        self.__img_player_class = img_player_class
 
         self.__robot = None
         self.__voice = None
         self.__speaker = None
         self.__controller = None
         self.__sound_player = None
+        self.__img_player = None
+        self.__async_img_player = None
 
         self.__ros_spin_thread = None
         self.__voice_run_thread = None
@@ -42,6 +45,9 @@ class ArmBuilder(AbstractBuilder):
             self.__sound_player.init()
             self.__speaker = self.__speaker_class(sound_player=self.__sound_player.playsound)
 
+        self.__img_player = self.__img_player_class()
+        self.__async_img_player = self.__img_player.async_play()
+
         # Initialize ros node
         rospy.init_node(name="robot_controller",
                         anonymous=True,
@@ -49,7 +55,7 @@ class ArmBuilder(AbstractBuilder):
         self.__ros_spin_thread = Thread(target=rospy.spin)
 
         # robot API
-        self.__robot = self.__robot_class(local_rospy=rospy, speaker=self.__speaker)
+        self.__robot = self.__robot_class(local_rospy=rospy, speaker=self.__speaker, img_shower=self.__img_player)
         self.__robot.res_init()
 
         # create pipe
@@ -62,7 +68,8 @@ class ArmBuilder(AbstractBuilder):
 
         # controller API
         self.__controller = self.__controller_class(local_rospy=rospy, robot=self.__robot,
-                                                    channel_select_pipe=master_pipe)
+                                                    channel_select_pipe=master_pipe,
+                                                    img_player=self.__async_img_player)
 
         self.__is_Built = True
 
@@ -88,6 +95,7 @@ class ArmBuilder(AbstractBuilder):
         self.__controller.stop()
         self.__robot.loop_stop()
         self.__voice.stop()
+        self.__img_player.destroy()
         print("stop dev")
 
         if not rospy.is_shutdown():

@@ -53,7 +53,7 @@ class faceDeteaction:
 						print("x_middle-----%d" % x_middle)
 						print("y_middle-----%d" % y_middle)
 
-				cv2.imshow("capture", frame)
+				self.__robot.show("capture", frame)
 				if cv2.waitKey(1) == ord('q'):  # 当按键按下q键时退出
 					break
 		self.cap.release()
