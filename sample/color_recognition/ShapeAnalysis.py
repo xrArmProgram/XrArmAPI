@@ -30,8 +30,8 @@ class ShapeAnalysis(AbstractRunner):
         grad_x = cv2.Sobel(gray, cv2.CV_16SC1, 1, 0)
         grad_y = cv2.Sobel(gray, cv2.CV_16SC1, 0, 1)
 
-        self.__thresh_min = cv2.getTrackbarPos('threshMin', 'image')  # 获取滑动条值
-        self.__thresh_max = cv2.getTrackbarPos('threshMax', 'image')
+        # self.__thresh_min = cv2.getTrackbarPos('threshMin', 'image')  # 获取滑动条值
+        # self.__thresh_max = cv2.getTrackbarPos('threshMax', 'image')
         # edge_output = cv2.Canny(grad_x, grad_y, self.thresh_min, self.thresh_max)  # 启动Canny边缘检测
         edge_output = cv2.Canny(grad_x, grad_y, self.__thresh_min, self.__thresh_max)  # 启动Canny边缘检测
         return edge_output
