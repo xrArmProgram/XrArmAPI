@@ -8,7 +8,7 @@ import numpy as np
 
 
 class ShapeAnalysis(object):
-    def __init__(self, **kwargs):
+    def __init__(self, robot, local_rospy):
         self.__shapes = {'triangle': 0, 'rectangle': 0, 'polygons': 0, 'circles': 0}
         self.__thresh_min = 50  # Canny边缘检测，阈值最小值
         self.__thresh_max = 150  # Canny边缘检测，阈值最大值
@@ -19,6 +19,7 @@ class ShapeAnalysis(object):
         self.__cap = cv2.VideoCapture(0)
         self.__cap.set(3, 480)  # 设置画面宽度
         self.__cap.set(4, 640)  # 设置画面长度
+        self.__robot = robot
 
     def __edge_demo(self, image):
         # 高斯滤波(3, 3)表示高斯矩阵的长与宽都是3，标准差取0
@@ -108,14 +109,14 @@ class ShapeAnalysis(object):
         return image
 
     def run(self):
-        cv2.namedWindow('image')
-        # 创建俩个滑动条
-        cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
-        # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
-        cv2.createTrackbar('threshMax', 'image', 0, 255, self.__callback)
-        cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
-        cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
-        cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
+        # cv2.namedWindow('image')
+        # # 创建俩个滑动条
+        # cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
+        # # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
+        # cv2.createTrackbar('threshMax', 'image', 0, 255, self.__callback)
+        # cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
+        # cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
+        # cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
         self.__is_running = True
 
         while self.__is_running:
@@ -135,6 +136,3 @@ class ShapeAnalysis(object):
     def stop(self):
         self.__is_running = False
 
-
-if __name__ == "__main__":
-    ShapeAnalysis().run()
