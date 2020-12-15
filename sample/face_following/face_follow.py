@@ -108,8 +108,6 @@ class FaceFollower(AbstractRunner):
                         self.__robot.update(servo)
 
                 self.__robot.show("capture", frame)  # 显示图像
-                if cv2.waitKey(1) & 0xff == ord('q'):  # 当按键按下q键时退出
-                    break
 
         self.__cap.release()
         cv2.destroyAllWindows()

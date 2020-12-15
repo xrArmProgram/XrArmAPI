@@ -124,8 +124,6 @@ class ShapeAnalysis(object):
                 if ret:
                     if img is not None:
                         self.__analysis(img)
-                        if cv2.waitKey(1) == ord('q'):  # 当按键按下q键时退出
-                            raise KeyboardInterrupt
 
             except KeyboardInterrupt:
                 print("user stop app")

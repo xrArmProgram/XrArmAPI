@@ -109,8 +109,6 @@ class ObjectSorting(AbstractRunner):
                             return self.__color
 
                     self.__robot.show('camera', frame)  # 显示窗口
-                    if cv2.waitKey(1) == ord('q'):  # 当按键按下q键时退出
-                        break
                 else:
                     print("无画面")
             else:
