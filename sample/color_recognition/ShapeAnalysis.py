@@ -110,7 +110,7 @@ class ShapeAnalysis(AbstractRunner):
         return image
 
     def run(self):
-        # cv2.namedWindow('image')
+        cv2.namedWindow('image')
         # # 创建俩个滑动条
         # cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
         # # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
