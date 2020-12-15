@@ -1,12 +1,11 @@
 from traceback import print_exc
 
-from API import ArmBuilder, RobotController, ArmRobot, SoundSpeaker, SNRVoice, PyAudioPlayer
-
+from API import ArmBuilder, RobotController, ArmRobot, SoundSpeaker, SNRVoice, PyAudioPlayer, ImgPlayer
 
 comes = "/dev/xrvoice"
 board = 9600
 
-builder = ArmBuilder(RobotController, ArmRobot, SoundSpeaker, SNRVoice, comes, board, PyAudioPlayer)
+builder = ArmBuilder(RobotController, ArmRobot, SoundSpeaker, SNRVoice, comes, board, ImgPlayer, PyAudioPlayer)
 
 builder.build()
 builder_iterable = builder.run_iterable()
