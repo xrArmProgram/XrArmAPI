@@ -2,9 +2,7 @@
 
 
 import cv2
-import numpy as np
 
-# from API.BASE import AbstractRunner
 from API.BASE import AbstractRunner
 
 
@@ -94,7 +92,7 @@ class ShapeAnalysis(AbstractRunner):
                         self.__shapes['polygons'] = count
                         shape_type = "多边形"
 
-                    print("shape_type:%s ----%s" % (shape_type, corners))
+                print("shape_type:%s ----%s" % (shape_type, corners))
 
     # self.__robot.show("input image", binary)
 
