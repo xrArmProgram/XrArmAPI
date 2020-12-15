@@ -5,9 +5,10 @@ import cv2
 import numpy as np
 
 # from API.BASE import AbstractRunner
+from API.BASE import AbstractRunner
 
 
-class ShapeAnalysis(object):
+class ShapeAnalysis(AbstractRunner):
     def __init__(self, robot, local_rospy):
         self.__shapes = {'triangle': 0, 'rectangle': 0, 'polygons': 0, 'circles': 0}
         self.__thresh_min = 50  # Canny边缘检测，阈值最小值
