@@ -16,7 +16,7 @@ class ImgPlayer(AbstractImgPlayer):
         self._is_running = True
 
         while self._is_running:
-            if not self._images:
+            if len(self._images) > 0:
                 window_name, img = self._images.pop(0)
                 imshow(window_name, img)
 
