@@ -118,7 +118,8 @@ class ShapeAnalysis(AbstractRunner):
         # cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
         # cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
         # cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
-        # self.__is_running = True
+
+        self.__is_running = True
 
         while self.__is_running:
             try:
