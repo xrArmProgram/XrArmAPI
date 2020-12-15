@@ -55,7 +55,7 @@ class ArmBuilder(AbstractBuilder):
         self.__ros_spin_thread = Thread(target=rospy.spin)
 
         # robot API
-        self.__robot = self.__robot_class(local_rospy=rospy, speaker=self.__speaker, img_shower=self.__img_player)
+        self.__robot = self.__robot_class(local_rospy=rospy, speaker=self.__speaker, img_player=self.__img_player)
         self.__robot.res_init()
 
         # create pipe
