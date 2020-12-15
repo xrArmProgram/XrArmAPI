@@ -112,12 +112,12 @@ class ShapeAnalysis(AbstractRunner):
     def run(self):
         cv2.namedWindow('image')
         # # 创建俩个滑动条
-        # cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
-        # # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
-        # cv2.createTrackbar('threshMax', 'image', 0, 255, self.__callback)
-        # cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
-        # cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
-        # cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
+        cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
+        # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
+        cv2.createTrackbar('threshMax', 'image', 0, 255, self.__callback)
+        cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
+        cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
+        cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
         self.__is_running = True
 
         while self.__is_running:
