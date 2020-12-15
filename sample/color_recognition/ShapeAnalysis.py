@@ -41,8 +41,8 @@ class ShapeAnalysis(AbstractRunner):
 
     def __analysis(self, frame):
         thresh = self.__edge_demo(frame)
-        self.__binary_min = cv2.getTrackbarPos('binaryMin', 'image')  # 获取滑动条值
-        self.__binary_max = cv2.getTrackbarPos('binaryMax', 'image')
+        # self.__binary_min = cv2.getTrackbarPos('binaryMin', 'image')  # 获取滑动条值
+        # self.__binary_max = cv2.getTrackbarPos('binaryMax', 'image')
         ret, binary = cv2.threshold(thresh, self.__binary_min, self.__binary_max, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         # ret, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)  # 转为二值图
         # self.__robot.show("input image", frame)
@@ -62,7 +62,7 @@ class ShapeAnalysis(AbstractRunner):
                     break
 
                 # 轮廓逼近
-                self.__epsilonProportion = cv2.getTrackbarPos('epsilonProportion', 'image') * 0.01
+                # self.__epsilonProportion = cv2.getTrackbarPos('epsilonProportion', 'image') * 0.01
                 epsilon = self.__epsilonProportion * cv2.arcLength(contours[cnt], True)  # 计算轮廓周长
                 approx = cv2.approxPolyDP(contours[cnt], epsilon, True)
 
@@ -110,15 +110,15 @@ class ShapeAnalysis(AbstractRunner):
         return image
 
     def run(self):
-        cv2.namedWindow('image')
-        # # 创建俩个滑动条
-        cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
-        # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
-        cv2.createTrackbar('threshMax', 'image', 0, 255, self.__callback)
-        cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
-        cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
-        cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
-        self.__is_running = True
+        # cv2.namedWindow('image')
+        # 创建俩个滑动条
+        # cv2.createTrackbar('threshMin', 'image', 250, 255, self.__callback)  # 第一个参数时滑动条的名字，第二个参数是滑动条被放置的窗口的名字，
+        # # 第三个参数是滑动条默认值，第四个参数时滑动条的最大值，第五个参数时回调函数，每次滑动都会调用回调函数。
+        # cv2.createTrackbar('threshMax', 'image', 0, 255, self.__callback)
+        # cv2.createTrackbar('binaryMin', 'image', 0, 255, self.__callback)  # 二值化最小值调节
+        # cv2.createTrackbar('binaryMax', 'image', 254, 255, self.__callback)  # 二值化最大值调节
+        # cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
+        # self.__is_running = True
 
         while self.__is_running:
             try:
