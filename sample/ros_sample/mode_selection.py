@@ -27,8 +27,13 @@ class BaseModeSelection(AbstractRunner):
 
 class LearningMode(BaseModeSelection):
     def run(self):
+        self.msg.data = 1
+        self.pub()
+
+    def stop(self):
         self.msg.data = 2
         self.pub()
+
 
 
 class ActionMode(BaseModeSelection):
@@ -39,7 +44,7 @@ class ActionMode(BaseModeSelection):
 
 class BasicControlMode(BaseModeSelection):
     def run(self):
-        self.msg.data = 1
+        self.msg.data = 0
         self.pub()
 
 

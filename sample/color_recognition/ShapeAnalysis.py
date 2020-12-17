@@ -6,6 +6,9 @@ import cv2
 from API.BASE import AbstractRunner
 
 
+init_angle = [0.0, 0.0, -1.45, 0.0, 0.9]
+
+
 class ShapeAnalysis(AbstractRunner):
     def __init__(self, robot, local_rospy):
         self.__shapes = {'triangle': 0, 'rectangle': 0, 'polygons': 0, 'circles': 0}
@@ -13,7 +16,7 @@ class ShapeAnalysis(AbstractRunner):
         self.__thresh_max = 250  # Canny边缘检测，阈值最大值
         self.__binary_min = 0  # 二值化最小值
         self.__binary_max = 254  # 二值化最大值
-        self.__epsilonProportion = 1  # 轮廓逼近精度
+        self.__epsilonProportion = 0.01  # 轮廓逼近精度
         self.__is_running = False
         self.__cap = cv2.VideoCapture(0)
         self.__cap.set(3, 480)  # 设置画面宽度
@@ -118,6 +121,7 @@ class ShapeAnalysis(AbstractRunner):
         # cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
 
         self.__is_running = True
+        self.__robot.update(init_angle)
 
         while self.__is_running:
             try:
