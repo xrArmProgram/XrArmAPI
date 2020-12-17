@@ -9,8 +9,8 @@ from API.BASE import AbstractRunner
 class ShapeAnalysis(AbstractRunner):
     def __init__(self, robot, local_rospy):
         self.__shapes = {'triangle': 0, 'rectangle': 0, 'polygons': 0, 'circles': 0}
-        self.__thresh_min = 50  # Canny边缘检测，阈值最小值
-        self.__thresh_max = 150  # Canny边缘检测，阈值最大值
+        self.__thresh_min = 0  # Canny边缘检测，阈值最小值
+        self.__thresh_max = 250  # Canny边缘检测，阈值最大值
         self.__binary_min = 0  # 二值化最小值
         self.__binary_max = 254  # 二值化最大值
         self.__epsilonProportion = 1  # 轮廓逼近精度

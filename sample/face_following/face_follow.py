@@ -19,21 +19,39 @@ from API.BASE import AbstractRunner
 from xr_pid import PID
 
 
+def gaussCore(core_size, SIGMA):
+    weight_array = [math.exp(-((i-core_size//2)**2)/(SIGMA)**2 *2.0) for i in range(core_size)]
+    w_sum = sum(weight_array)
+    return [x/w_sum for x in weight_array]
+
+
+def gaussianFiltering(data, weight_array):
+    if not len(data) == len(weight_array):
+        return None
+
+    result = 0
+    for i in range(len(data)):
+        result += data[i] * weight_array[i]
+
+    return int(result) 
+    
+
+
 class FaceFollower(AbstractRunner):
     def __init__(self, robot, local_rospy):
-        self.__X_pid = PID(0.03, 0.09, 0.0005)  # 实例化一个X轴坐标的PID算法PID参数：第一个代表pid的P值，二代表I值,三代表D值
+        self.__X_pid = PID(0.012, 0.017, 0.019)  # 实例化一个X轴坐标的PID算法PID参数：第一个代表pid的P值，二代表I值,三代表D值
         self.__X_pid.setSampleTime(0.005)  # 设置PID算法的周期
         self.__X_pid.setPoint(160)  # 设置PID算法的预值点，即目标值，这里160指的是屏幕框的x轴中心点，x轴的像素是320，一半是160
 
-        self.__Y_pid = PID(0.035, 0.08, 0.002)  # 实例化一个Y轴坐标的PID算法PID参数：第一个代表pid的P值，二代表I值,三代表D值
+        self.__Y_pid = PID(0.013, 0.015, 0.017)  # 实例化一个Y轴坐标的PID算法PID参数：第一个代表pid的P值，二代表I值,三代表D值
         self.__Y_pid.setSampleTime(0.005)  # 设置PID算法的周期
         self.__Y_pid.setPoint(160)  # 设置PID算法的预值点，即目标值，这里160指的是屏幕框的y轴中心点，y轴的像素是320，一半是160
 
         self.__x_middle = 0  # 人脸框中心x轴的坐标
         self.__y_middle = 0  # 人脸框中心y轴的坐标
 
-        self.__angle_X = 80  # x轴舵机初始角度
-        self.__angle_Y = 20  # y轴舵机初始角度
+        self.__angle_X = 90  # x轴舵机初始角度
+        self.__angle_Y = 40  # y轴舵机初始角度
 
         self.__servo_X = 0  # 设置x轴舵机号
         self.__servo_Y = 2  # 设置y轴舵机号
@@ -58,6 +76,9 @@ class FaceFollower(AbstractRunner):
     def run(self):
         self.__INIT()
         self.__is_running = True
+        x_middles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        y_middles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        gauss_core = gaussCore(11, 10)
 
         while self.__is_running:
             ret, frame = self.__cap.read()  # 获取摄像头视频流
@@ -73,8 +94,25 @@ class FaceFollower(AbstractRunner):
                         x_middle = result[0] + w / 2  # x轴中心
                         y_middle = result[1] + h / 2  # y轴中心
 
-                        self.__X_pid.update(x_middle)  # 将X轴数据放入pid中计算输出值
-                        self.__Y_pid.update(y_middle)  # 将Y轴数据放入pid中计算输出值
+                        x_middles.append(x_middle)
+                        y_middles.append(y_middle)
+
+                        if len(x_middles) > 11:
+                            for i in range(len(x_middles) -11):
+                                x_middles.pop(0)
+
+                        if len(y_middles) > 11:
+                            for i in range(len(y_middles) -11):
+                                y_middles.pop(0)
+                        x = gaussianFiltering(x_middles, gauss_core)
+                        y = gaussianFiltering(y_middles, gauss_core)
+                        print("x:{},x_middle:{}\n y:{}, y_middle:{}".format(x,x_middle,y,y_middle))
+                        print("x_middles:{}\n y_middles:{}".format(x_middles, y_middles))
+                        print("gauss_core:{}".format(gauss_core))
+
+                        self.__X_pid.update(x)  # 将X轴数据放入pid中计算输出值
+                        self.__Y_pid.update(y)  # 将y轴数据放入pid中计算输出值
+
                         # print("X_pid.output==%d"%X_pid.output)     #打印X输出
                         # print("Y_pid.output==%d"%Y_pid.output)     #打印Y输出
 
@@ -102,8 +140,8 @@ class FaceFollower(AbstractRunner):
                         # servo.set(servo_Y, angle_Y)  # 设置Y轴舵机
                         print("__angle_X: {}, __angle_Y: {}".format(self.__angle_X, self.__angle_Y))
                         servo = self.__robot.read()
-                        servo[self.__servo_X] = (self.__angle_X - 90) / 180.0 * math.pi
-                        servo[self.__servo_Y] = self.__angle_Y / 180.0 * math.pi - 0.89
+                        servo[self.__servo_X] = (90 - self.__angle_X) / 180.0 * math.pi
+                        servo[self.__servo_Y] = (self.__angle_Y-50.0) / 180.0 * math.pi - 0.89
 
                         self.__robot.update(servo)
 
@@ -114,3 +152,4 @@ class FaceFollower(AbstractRunner):
 
     def stop(self):
         self.__is_running = False
+
