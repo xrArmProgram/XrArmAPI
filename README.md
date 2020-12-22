@@ -8,7 +8,7 @@
 
 ## 使用说明
 
-​		整个框架的程序入口是`main.py`。执行`python main.py`即可运行程序。运行程序后，可以通过语音控制来选择相应的功能。
+​		整个框架的程序入口是`main.py`。执行`python main.py`即可运行程序。运行程序后，可以通过[语音控制](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/voice_commands.md)来选择相应的功能。
 
 **Python版本：python 2.7**
 
