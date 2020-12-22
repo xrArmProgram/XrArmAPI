@@ -1,7 +1,7 @@
-from sample.object_sorting.ObjectSorting import ObjectSorting
+from simple.object_sorting.ObjectSorting import ObjectSorting
 from setting.conroller_commands import controller_commands
 
-from sample import DetectorColor, FaceFollower, BasicControlMode, LearningMode, VisualGrabbingMode, \
+from simple import DetectorColor, FaceFollower, BasicControlMode, LearningMode, VisualGrabbingMode, \
     ActionMode, ShapeAnalysis
 
 channels = {

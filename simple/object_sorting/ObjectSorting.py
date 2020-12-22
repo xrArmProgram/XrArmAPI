@@ -6,7 +6,7 @@ import numpy as np
 from time import sleep
 
 from API.BASE import AbstractRunner
-from sample.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose
+from simple.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose
 
 
 class ObjectSorting(AbstractRunner):

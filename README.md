@@ -2,7 +2,24 @@
 
 ## XrArmAPI概述
 
-​			这是一个基于XR的AI机械臂的二次开发框架。框架集成了rospy接口、moveit控制接口，用户无需了解ROS和moveit技术即可完成对XR的AI机械臂的控制。仅需要一点点的Python基础。该框架使用抽象工厂模式设计，集成了机器人控制组件、音频播放组件、图像显示组件、语音模块解析组件、用户自定义插件、流程控制器组件。框架通过builder将这些组件组装到一起，并提供阻塞和非阻塞两种运行方式。用户可根据需求自行选择运行模式。所有配置信息都存放在setting中。如果需要开发自定义功能插件，请查看[二次开发指导文档](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/Development_guidance.md)，也可以参考[预设的二次开发案例](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/sample.md)。
+​			这是一个基于XR的AI机械臂的二次开发框架。框架集成了rospy接口、moveit控制接口，用户无需了解ROS和moveit技术即可完成对XR的AI机械臂的控制。仅需要一点点的Python基础。该框架使用抽象工厂模式设计，集成了机器人控制组件、音频播放组件、图像显示组件、语音模块解析组件、用户自定义插件、流程控制器组件。框架通过builder将这些组件组装到一起，并提供阻塞和非阻塞两种运行方式。用户可根据需求自行选择运行模式。所有配置信息都存放在setting中。如果需要开发自定义功能插件，请查看[二次开说明文档](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/Development_guidance.md)，也可以参考[预设的二次开发案例](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/simple.md)。
+
+-----
+
+## 使用说明
+
+​	整个框架的程序入口是`main.py`。执行`python main.py`即可运行程序。
+
+​	Python版本：python 2.7
+
+​	依赖的Python包：
+
+|   包名    |  版本  |
+| :-------: | :----: |
+|  pyaudio  | 0.2.11 |
+| playsound | 1.2.2  |
+
+
 
 ---------
 
@@ -15,11 +32,11 @@
 
     ​		定义了接口的具体实现，这是软件运行过程中实际调用的接口。所有系统接口都定义在`API`中
 
- - [二次开发实例](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/sample.md)
+ - [二次开发实例](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/simple.md)
 
     ​		这是框架预设的二次开发案例，有颜色识别、形状识别、人脸跟随、物体分拣和ROS通信示例。这些模块默认已经插入到框架中，在运行`python main.py`后，可以通过语音功能呼出相应的功能。
 
- - [二次开发指导](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/Development_guidance.md)
+ - [二次开发说明](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/Development_guidance.md)
 
     ​		这里是关于自定义二次开发的一些指导和说明。如果需要开发自定一功能，务必查看该文档。
 
