@@ -7,7 +7,7 @@ from time import sleep
 
 import xrarm_audio
 from API.BASE import AbstractRunner
-from sample.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose, sound_of_colors
+from simple.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose, sound_of_colors
 
 
 class ObjectSorting(AbstractRunner):

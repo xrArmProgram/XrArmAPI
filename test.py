@@ -9,7 +9,7 @@ from API.BASE import BaseApp, SimpleRobot
 from API import SNRVoice, ArmRobot, SoundSpeaker
 import xrarm_audio
 from API import RobotController, ArmBuilder
-from sample import DetectorColor
+from simple import DetectorColor
 
 
 def pipe_io(local_app, master_pipe):

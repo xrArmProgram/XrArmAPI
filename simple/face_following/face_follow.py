@@ -62,7 +62,7 @@ class FaceFollower(AbstractRunner):
         self.__robot = robot
 
         # face.xml的位置要和本程序位于同一文件夹下
-        self.__face_cascade = cv2.CascadeClassifier('sample/face_following/face.xml')
+        self.__face_cascade = cv2.CascadeClassifier('simple/face_following/face.xml')
 
         self.__is_running = False
 
