@@ -2,6 +2,7 @@ from json import loads
 from threading import Thread
 from time import sleep, time
 
+import xrarm_audio
 from BASE.BaseController import AbstractController
 from setting import channels, sys_channel
 from API.BASE import BaseSingleton4py2, AbstractRunner
@@ -37,6 +38,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         # start controller
         self.__controller_is_running = True
         img_player_not_stop = True
+        self.__robot.speak(xrarm_audio.app_start_run)
 
         while self.__controller_is_running or img_player_not_stop:
             self.__main()
@@ -53,6 +55,7 @@ class RobotController(AbstractController, BaseSingleton4py2):
         # start controller
         self.__controller_is_running = True
         img_player_not_stop = True
+        self.__robot.speak(xrarm_audio.app_start_run)
 
         while self.__controller_is_running or img_player_not_stop:
             self.__main()

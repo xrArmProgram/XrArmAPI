@@ -5,8 +5,9 @@ import cv2
 import numpy as np
 from time import sleep
 
+import xrarm_audio
 from API.BASE import AbstractRunner
-from sample.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose
+from sample.object_sorting.config import color_recognition_sensitivity, init_angle, object_pose, color_pose, sound_of_colors
 
 
 class ObjectSorting(AbstractRunner):
@@ -16,20 +17,25 @@ class ObjectSorting(AbstractRunner):
         self.__cap.set(3, 480)  # 设置画面宽度
         self.__cap.set(4, 640)  # 设置画面长度
         self.__robot = robot
-        self.__color_dist = {'blue': {
-            'Lower': np.array([156, 128, 46]),
-            'Upper': np.array([180, 255, 255]),
-        },
-            'green': {
-                'Lower': np.array([100, 80, 46]),
-                'Upper': np.array([124, 255, 255])
+        self.__color_dist = {
+            'blue': {
+                'Lower': np.array([100, 43, 46]),
+                'Upper': np.array([175, 256, 256]),
+            },
+            'yellow': {
+                'Lower': np.array([190, 150, 20]),
+                'Upper': np.array([210, 256, 256])
             },
             'red': {
-                'Lower': np.array([35, 43, 35]),
-                'Upper': np.array([90, 255, 255])
+                'Lower': np.array([180, 43, 46]),
+                'Upper': np.array([190, 256, 256]),
+            },
+            'green': {
+                'Lower': np.array([30, 80, 46]),
+                'Upper': np.array([90, 256, 256]),
             },
         }
-        self.__idx_dist = ['red', 'blue', 'green']  # 颜色List
+        self.__idx_dist = ['blue', 'yellow','red', 'green']  # 颜色List
         self.__CNT = 10  # 设置识别率计算次数
         self.__rec_count = 0  # 自增值
         self.__precision = [0, 0, 0]  # 识别度存储
@@ -41,20 +47,24 @@ class ObjectSorting(AbstractRunner):
         for i in self.__color_dist.keys():
             # print(i)
             index = {key: index for index, key in enumerate(self.__color_dist)}.get(i)  # 获取字典对应下标
-            result = self.recognize_color(frame, self.__color_dist[i]['Lower'], self.__color_dist[i]['Upper'], 10000)
+            result = self.recognize_color(frame, self.__color_dist[i]['Lower'], self.__color_dist[i]['Upper'], 6000)
             if result:
                 dat[index] = 1  # 对应颜色下标的数据赋值1
         # print(dat)
         return dat  # 返回数据组
 
-    @staticmethod
-    def recognize_color(frame, lower, upper, area):
+    # @staticmethod
+    def recognize_color(self, frame, lower, upper, area):
         result = False
         gs_frame = cv2.GaussianBlur(frame, (5, 5), 0)  # 高斯模糊
         hsv = cv2.cvtColor(gs_frame, cv2.COLOR_BGR2HSV)  # 转化成HSV图像
-        erode_hsv = cv2.erode(hsv, None, iterations=2)  # 腐蚀粗的变细
-        in_range_hsv = cv2.inRange(erode_hsv, lower, upper)  # 根据阀值，去除背景部分
-        counts = cv2.findContours(in_range_hsv.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]  # 获得形状块
+
+        in_range_hsv = cv2.inRange(hsv, lower, upper)  # 根据阀值，去除背景部分
+        erode_hsv = cv2.erode(in_range_hsv, None, iterations=2)  # 腐蚀粗的变细
+        self.__robot.show('hsv', in_range_hsv)
+
+        self.__robot.show('tiqu', hsv)
+        counts = cv2.findContours(erode_hsv.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]  # 获得形状块
 
         if counts:  # 确认检测到形状块
             for c in counts:
@@ -108,7 +118,7 @@ class ObjectSorting(AbstractRunner):
                         if color_count > color_recognition_sensitivity:
                             return self.__color
 
-                    self.__robot.show('camera', frame)  # 显示窗口
+                    self.__robot.show('camera1', frame)  # 显示窗口
                 else:
                     print("无画面")
             else:
@@ -118,6 +128,8 @@ class ObjectSorting(AbstractRunner):
 
     def run(self):
         self.__is_running = True
+        self.__robot.speak(xrarm_audio.start_sorting_mode)
+
         self.__robot.update(init_angle)
         sleep(3)
         while self.__is_running:
@@ -126,6 +138,7 @@ class ObjectSorting(AbstractRunner):
                 break
 
             print("got it")
+            self.__robot.speak(sound_of_colors[local_color])
             for angle in object_pose:
                 self.__robot.update(angle)
                 sleep(1)

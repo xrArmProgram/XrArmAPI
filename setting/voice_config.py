@@ -21,16 +21,16 @@ VOICE_MOD_SET = {
     '0x11': "channel17",
     '0x12': "channel18",
     '0x13': "channel19",
-    '0x14': "channel20",
-    '0xff': "step_back",
+    '0x19': "channel20",
+    '0x00': "step_back",
 }
 
 RECV_LEN = 4
 
 SNR_PROTOCOL_CONFIG = {
-    "RECV_LEN": 4,
-    "head": '0xf4',
-    'tail': '0xff',
-    'data_pose': 3,
-    'special': [(2, '0x06'), ],
+    "RECV_LEN": 5,
+    "head": ['0xff', '0xf5'],
+    'tail': ['0xff'],
+    'data_pose': 4,
+    'special': [(3, '0x01'), ],
 }

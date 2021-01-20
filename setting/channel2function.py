@@ -2,7 +2,7 @@ from sample.object_sorting.ObjectSorting import ObjectSorting
 from setting.conroller_commands import controller_commands
 
 from sample import DetectorColor, FaceFollower, BasicControlMode, LearningMode, VisualGrabbingMode, \
-    ActionMode, ShapeAnalysis
+    ActionMode, ShapeAnalysis, TestSimple
 
 channels = {
     "default_channel": {
@@ -13,49 +13,42 @@ channels = {
         "functional_class": BasicControlMode,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "learning_model": {
         "functional_class": LearningMode,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "operation_action": {
         "functional_class": ActionMode,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "visual_grabbing": {
         "functional_class": VisualGrabbingMode,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "color_recognition": {
         "functional_class": DetectorColor,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "shape_recognition": {
         "functional_class": ShapeAnalysis,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "face_following": {
         "functional_class": FaceFollower,
         "command": [
             controller_commands['exit_function'],
-            controller_commands['say_hello'],
         ],
     },
     "sorting_mode": {
@@ -95,7 +88,7 @@ custom_channel = ["channel{}".format(i) for i in xrange(12, 21)]
 
 channels.update({
     custom_channel[0]: {
-        "functional_class": None,
+        "functional_class": TestSimple,
         "command": [controller_commands['say_hello']],
     }})
 

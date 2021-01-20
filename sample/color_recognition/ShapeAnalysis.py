@@ -3,10 +3,11 @@
 
 import cv2
 
+import xrarm_audio
 from API.BASE import AbstractRunner
 
 
-init_angle = [0.0, 0.0, -1.45, 0.0, 0.9]
+init_angle = [0.22, 0.0, -1.45, 0.0, 0.9]
 
 
 class ShapeAnalysis(AbstractRunner):
@@ -41,6 +42,7 @@ class ShapeAnalysis(AbstractRunner):
         pass
 
     def __analysis(self, frame):
+        frame = frame[160:420, 70:580]
         thresh = self.__edge_demo(frame)
         # self.__binary_min = cv2.getTrackbarPos('binaryMin', 'image')  # 获取滑动条值
         # self.__binary_max = cv2.getTrackbarPos('binaryMax', 'image')
@@ -121,6 +123,7 @@ class ShapeAnalysis(AbstractRunner):
         # cv2.createTrackbar('epsilonProportion', 'image', 1, 20, self.__callback)  # 二值化最大值调节
 
         self.__is_running = True
+        self.__robot.speak(xrarm_audio.start_shape_recognition)
         self.__robot.update(init_angle)
 
         while self.__is_running:

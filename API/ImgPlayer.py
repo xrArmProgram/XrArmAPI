@@ -10,6 +10,9 @@ class ImgPlayer(AbstractImgPlayer):
         self._is_running = False
 
     def show(self, window_name, img):
+        if len(self._images) > 10:
+            self._images = self._images[-10:]
+
         self._images.append((window_name, img))
 
     def async_play(self):
