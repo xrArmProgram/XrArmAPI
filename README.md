@@ -1,67 +1,54 @@
 # README
 
-## XrArmAPI功能说明
+## XrArmAPI概述
 
-- SimpleRobot(robot_name)<br>
-创建一个机器人对象<br>
-参数说明：
-    - robot_name: 创建的机器人节点的节点名称，在系统中唯一。
+​		这是一个基于XR的AI机械臂的二次开发框架。框架集成了rospy接口、moveit控制接口，用户无需了解ROS和moveit技术即可完成对XR的AI机械臂的控制。仅需要一点点的Python基础。该框架使用抽象工厂模式设计，集成了机器人控制组件、音频播放组件、图像显示组件、语音模块解析组件、用户自定义插件、流程控制器组件。框架通过builder将这些组件组装到一起，并提供阻塞和非阻塞两种运行方式。用户可根据需求自行选择运行模式。所有配置信息都存放在setting中。如果需要开发自定义功能插件，请查看[二次开说明文档](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/Development_guidance.md)，也可以参考[预设的二次开发案例](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/simple.md)。
 
-- init() -> none
+-----
 
-    将机械臂恢复到初始状态
-- set_pose(pose) -> none
+## 使用说明
 
-    设置末端执行器的空间坐标
-    参数说明:
-    - pose: [x, y, z]，空间坐标数组。指定末端执行器的位置。
-- update(angle) -> none
-    修改机械臂各个关节的角度。
-    参数说明：
-    - angle： 5个关节的角度值的数组（从0-4，分别对应机械臂从下到上5个关节），弧度制。数组长度必须大于等于5。
-    前5个数据有效，第5个之后的数据舍弃。
+​		整个框架的程序入口是`main.py`。执行`python main.py`即可运行程序。运行程序后，可以通过[语音控制](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/voice_commands.md)来选择相应的功能。
 
-- loop() -> none
+**Python版本：python 2.7**
 
-    阻塞循环等待后台事件处理，直到用户终止程序（执行loop_stop或者终止整个进程）。
-- loop_start() -> none
+**依赖的Python包：**
 
-    新建一个线程在后台处理后台事件，不会在当前程序阻塞。调用loop_stop时结束该进程。
-- loop_stop() -> none
+|   包名    |  版本  |
+| :-------: | :----: |
+|  pyaudio  | 0.2.11 |
+| playsound | 1.2.2  |
 
-    终止loop*函数。
-- read() -> tuple
 
-    读取当前机械臂各个关节的角度。返回值为5个数据的数组。从0-4分别代表机械臂从下到上5个关节的角度。
-- speak(audio_file, block)
-    播放音频。
-    参数说明：
-    - audio_file: 音频文件的路径
-    - block: 如果为False， 非阻塞执行
-    
+
 ---------
- 
- ## 文件结构说明
- - BASE 基类定义
-     - BaseRobot.py
-     
-        - class AbstractRobot：
-        
-            定义机械臂的操作接口（抽象类）。之后需要实现机械臂接口继承该类即可。
-        - class SimpleRobot(AbstractRobot):
-        
-            实现类一个用于调试的简单机械臂接口类。不能操纵机械臂。只用于接口调试。
-    
-     - BaseSpeaker.py
-        - class AbstractSpeaker
-        
-            抽象音频播放接口。
-        - class PlaySoundSpeaker(AbstractSpeaker)
-        
-            基于playsound的音频播放接口
-- 实现的API接口
-    - PlaySoundSpeaker
-    - ArmRobot
- - test.py
- 
-    基于SimpleRobot的简单测试示例程序。
+
+ ## 开发说明
+ - [API接口定义](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/base_class.md)
+
+    ​		  定义了接口的抽象定义。实现接口类需要继承自对应功能的抽象类，该类不能实例化。继承了抽象接口的类必须实现抽象接口定义的所有抽象方法。如`class ArmRobot(AbstractRobot, BaseSingleton4py2)`.表示该接口为robot类型的接口的实现，且是一个使用单例模式设计的类。并且该robot类必须实现AbstractRobot所定义的被@abstractmethod修饰的方法。所有的抽象接口都定义在`API/BASE`中。
+
+- [实现的API接口类](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/API.md)
+
+    ​		定义了接口的具体实现，这是软件运行过程中实际调用的接口。所有系统接口都定义在`API`中
+
+ - [二次开发实例](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/simple.md)
+
+    ​		这是框架预设的二次开发案例，有颜色识别、形状识别、人脸跟随、物体分拣和ROS通信示例。这些模块默认已经插入到框架中，在运行`python main.py`后，可以通过语音功能呼出相应的功能。
+
+ - [二次开发说明](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/Development_guidance.md)
+
+    ​		这里是关于自定义二次开发的一些指导和说明。如果需要开发自定一功能，务必查看该文档。
+
+- [配置信息](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/setting.md)
+
+  ​		这里存储了框架中所有的配置信息，包括语音模块通信协议配置、功能模块的插入和映射等。
+
+- [音频配置](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/audio_config.md)
+
+  ​		这里存放所有的音频文件，音频文件的配置也在这里。
+
+- [环境配置](https://github.com/xrArmProgram/XrArmAPI/blob/main/doc/env_installer.md)
+
+  ​		这里有放有框架所需python包信息，运行安装脚本即可完成安装。
+

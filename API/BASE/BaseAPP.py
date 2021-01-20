@@ -17,7 +17,7 @@ class AbstractApp(object):
         pass
 
 
-class AbstractRunner:
+class AbstractRunner(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -50,5 +50,5 @@ class OperationRepetitionError(Exception):
 
 def only_run_once(running_flag):
     if running_flag:
-        raise
+        raise OperationRepetitionError
 

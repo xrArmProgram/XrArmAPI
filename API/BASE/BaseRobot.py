@@ -12,7 +12,7 @@ class AbstractRobot(object):
 
     @abstractmethod
     def init(self):
-        """Return the manipulator to its original position."""
+        """Return to manipulator to its original position."""
         pass
 
     @abstractmethod
