@@ -15,6 +15,7 @@ import cv2
 import math  # 提供了许多对浮点数的数学运算函数
 from time import sleep
 
+import xrarm_audio
 from API.BASE import AbstractRunner
 from xr_pid import PID
 
@@ -74,8 +75,11 @@ class FaceFollower(AbstractRunner):
         sleep(1)
 
     def run(self):
+        self.__robot.speak(xrarm_audio.face_following)
+
         self.__INIT()
         self.__is_running = True
+
         x_middles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         y_middles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         gauss_core = gaussCore(11, 10)
@@ -140,7 +144,7 @@ class FaceFollower(AbstractRunner):
                         # servo.set(servo_Y, angle_Y)  # 设置Y轴舵机
                         print("__angle_X: {}, __angle_Y: {}".format(self.__angle_X, self.__angle_Y))
                         servo = self.__robot.read()
-                        servo[self.__servo_X] = (90 - self.__angle_X) / 180.0 * math.pi
+                        servo[self.__servo_X] = (self.__angle_X - 90) / 180.0 * math.pi
                         servo[self.__servo_Y] = (self.__angle_Y-50.0) / 180.0 * math.pi - 0.89
 
                         self.__robot.update(servo)

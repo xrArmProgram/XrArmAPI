@@ -92,7 +92,12 @@ class SNRVoice(AbstractVoice):
         if len(data) < SNR_PROTOCOL_CONFIG["RECV_LEN"]:
             return None
 
-        if data[0] == SNR_PROTOCOL_CONFIG["head"] and data[len(data) - 1] == SNR_PROTOCOL_CONFIG["tail"]:
+        HEAD = SNR_PROTOCOL_CONFIG["head"]
+        TAIL = SNR_PROTOCOL_CONFIG["tail"]
+        HEAD_LENGTH = len(HEAD)
+        TAIL_LENGTH = len(TAIL)
+
+        if data[0:HEAD_LENGTH] == HEAD and data[-TAIL_LENGTH:] == TAIL:
             is_verify = True
             for index, value in SNR_PROTOCOL_CONFIG["special"]:
                 if data[index-1] != value:

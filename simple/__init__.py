@@ -6,3 +6,4 @@ from ros_sample.mode_selection import ActionMode
 from ros_sample.mode_selection import BasicControlMode
 from ros_sample.mode_selection import LearningMode
 from ros_sample.mode_selection import VisualGrabbingMode
+from custom_simple1 import TestSimple

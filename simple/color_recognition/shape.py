@@ -5,6 +5,7 @@ import numpy as np
 import threading
 import time
 
+import xrarm_audio
 from API.BASE import AbstractRunner
 
 
@@ -32,6 +33,8 @@ class CameraMotion(AbstractRunner):
         self.__CNT = 10  # 设置识别率计算次数
         self.__rec_count = 0  # 自增值
         self.__precision = [0, 0, 0]  # 识别度存储
+
+        self.__robot = robot
 
     def analyse(self, frame, color_dict):
         dat = [0] * len(color_dict)  # 根据颜色长度定义数组
@@ -76,10 +79,12 @@ class CameraMotion(AbstractRunner):
     def run(self):
         self.__is_running = True
 
+        self.__robot.speak(xrarm_audio.start_shape_recognition)
         while self.__is_running:
             ret, frame = self.__cap.read()
             if ret:
                 if frame is not None:
+                    frame = frame[160:320, 70:580]
                     if self.__rec_count < self.__CNT:  # 循环计算次数
                         self.__rec_count = self.__rec_count + 1
                         list_color = self.analyse(frame, self.__color_dist)  # 获取各个颜色识别的结果，返回list

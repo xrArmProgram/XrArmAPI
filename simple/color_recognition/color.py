@@ -4,6 +4,7 @@
 import cv2
 from time import sleep
 
+import xrarm_audio
 from API.BASE import AbstractRunner
 from config import color_recognition_sensitivity, empty_sensitivity, color_low_sensitivity
 from xrarm_audio import color_sound
@@ -23,6 +24,8 @@ class DetectorColor(AbstractRunner):
 
     def run(self):
         self.__is_run = True
+        self.__robot.speak(xrarm_audio.start_recognizing_colors)
+
         empty_count = 0
         while self.__is_run:
             # Capture frame-by-frame

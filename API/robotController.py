@@ -2,6 +2,7 @@ from json import loads
 from threading import Thread
 from time import sleep, time
 
+import xrarm_audio
 from BASE.BaseController import AbstractController
 from setting import channels, sys_channel
 from API.BASE import BaseSingleton4py2, AbstractRunner
