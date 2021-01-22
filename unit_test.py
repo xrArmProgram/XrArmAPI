@@ -13,12 +13,6 @@ from API import SoundSpeaker
 from simple import ShapeAnalysis
 
 
-# player = PyAudioPlayer()
-# player.init()
-#
-# player.playsound(robot_say_number)
-# player.stop()
-
 class APP(object):
     def __init__(self):
         self._is_run = False
@@ -36,44 +30,51 @@ class APP(object):
 def task_runner(g_task, local_app):
     while local_app.is_run():
         g_task.next()
-        # print("play img run {}".format(local_app.is_run()))
         sleep(0.03)
 
 
-sound = PyAudioPlayer()
-sound.init()
+def simple_test(task):
+    sound = PyAudioPlayer()
+    sound.init()
 
-speaker = SoundSpeaker(sound.playsound)
-player = ImgPlayer()
-ansyc_paly = player.async_play()
-app = APP()
+    speaker = SoundSpeaker(sound.playsound)
+    player = ImgPlayer()
+    ansyc_paly = player.async_play()
+    app = APP()
 
-runner_thread = Thread(target=task_runner, args=(ansyc_paly, app))
+    runner_thread = Thread(target=task_runner, args=(ansyc_paly, app))
+
+    rospy.init_node("test arm node", anonymous=True, disable_signals=True)
+    robot = ArmRobot("test_arm_node", rospy, speaker, img_player=player)
+
+    task_run = Thread(target=task.run)
+
+    try:
+        robot.res_init()
+
+        app.start()
+        robot.loop_start()
+        task_run.start()
+        runner_thread.start()
+
+        rospy.spin()
+
+    except Exception as e:
+        print_exc(e)
+
+    app.stop()
+    task.stop()
+    rospy.signal_shutdown("test end")
+    robot.loop_stop()
 
 
-rospy.init_node("test arm node", anonymous=True, disable_signals=True)
-robot = ArmRobot("test_arm_node", rospy, speaker, img_player=player)
-
-task = ShapeAnalysis(robot, rospy)
-
-task_run = Thread(target=task.run)
-
-
-try:
-    robot.res_init()
-
-    app.start()
-    robot.loop_start()
-    task_run.start()
-    runner_thread.start()
-
-    rospy.spin()
-
-except Exception as e:
-    print_exc(e)
-
-app.stop()
-task.stop()
-rospy.signal_shutdown("test end")
-robot.loop_stop()
-print("test end")
+# 测试代码， 把task换为不同的simple的类的实现即可。
+# （该测试成功的前提是未修改其他系统组件）
+if __name__ == "__main__":
+    task = ShapeAnalysis(robot, rospy)
+    
+    # 开始测试，按ctrl c结束测试。
+    simple_test(task)
+    
+    # 测试结束
+    print("test end")
