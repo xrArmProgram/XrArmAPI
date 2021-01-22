@@ -25,11 +25,13 @@ start_visual_capture = audio_dir + "start_visual_capture.wav"
 face_following = audio_dir + "face_following.wav"
 start_shape_recognition = audio_dir + "start_shape_recognition.wav"
 
-circular = audio_dir + "circular.wav"
-pentagon = audio_dir + "pentagon.wav"
-quadrilateral = audio_dir + "quadrilateral.wav"
-triangle = audio_dir + "triangle.wav"
-hexagon = audio_dir + "hexagon.wav"
+shapes = {
+    "circles": audio_dir + "circular.wav",
+    "pentagon": audio_dir + "pentagon.wav",
+    "rectangle": audio_dir + "quadrilateral.wav",
+    "triangle": audio_dir + "triangle.wav",
+    "hexagon": audio_dir + "hexagon.wav",
+}
 
 find_something_yellow = audio_dir + "find_something_yellow.wav"
 find_something_blue = audio_dir + "find_something_blue.wav"

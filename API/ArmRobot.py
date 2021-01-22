@@ -96,10 +96,11 @@ class ArmRobot(AbstractRobot, BaseSingleton4py2):
 
     def loop_stop(self):
         if self.__using_external_ros_handle:
+            print("__using_external_ros_handle")
             return None
 
-        rospy.signal_shutdown("user stopped controller")
-        self.__loop_thread.join()
+        self.__rospy.signal_shutdown("user stopped controller")
+        # self.__loop_thread.join()
         print("ros end")
 
     def set_pose(self, pose):

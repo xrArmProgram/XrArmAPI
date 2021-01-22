@@ -12,7 +12,9 @@ init_angle = [0.22, 0.0, -1.45, 0.0, 0.9]
 
 class ShapeAnalysis(AbstractRunner):
     def __init__(self, robot, local_rospy):
-        self.__shapes = {'triangle': 0, 'rectangle': 0, 'polygons': 0, 'circles': 0}
+        self.__shapes = {'triangle': 0, 'rectangle': 0, 'pentagon': 0, "hexagon": 0, 'circles': 0}
+
+        self.__zh2en = {'triangle': '三角形', 'rectangle': '矩形', 'pentagon': '5边形', "hexagon": '6边形', 'circles': '圆形'}
         self.__thresh_min = 0  # Canny边缘检测，阈值最小值
         self.__thresh_max = 250  # Canny边缘检测，阈值最大值
         self.__binary_min = 0  # 二值化最小值
@@ -23,6 +25,10 @@ class ShapeAnalysis(AbstractRunner):
         self.__cap.set(3, 480)  # 设置画面宽度
         self.__cap.set(4, 640)  # 设置画面长度
         self.__robot = robot
+
+        self._current_shape = None
+        self._shape_count = 0
+        self._ganrao_count = 0
 
     def __edge_demo(self, image):
         # 高斯滤波(3, 3)表示高斯矩阵的长与宽都是3，标准差取0
@@ -77,27 +83,51 @@ class ShapeAnalysis(AbstractRunner):
                         count = self.__shapes['triangle']
                         count = count + 1
                         self.__shapes['triangle'] = count
-                        shape_type = "三角形"
+                        shape_type = 'triangle'
 
                     if corners == 4:
                         count = self.__shapes['rectangle']
                         count = count + 1
                         self.__shapes['rectangle'] = count
-                        shape_type = "矩形"
+                        shape_type = 'rectangle'
 
                     if corners >= 10:
                         count = self.__shapes['circles']
                         count = count + 1
                         self.__shapes['circles'] = count
-                        shape_type = "圆形"
+                        shape_type = 'circles'
 
-                    if 4 < corners < 10:
-                        count = self.__shapes['polygons']
+                    if corners == 5:
+                        count = self.__shapes['pentagon']
                         count = count + 1
-                        self.__shapes['polygons'] = count
-                        shape_type = "多边形"
+                        self.__shapes['pentagon'] = count
+                        shape_type = 'pentagon'
 
-                print("shape_type:%s ----%s" % (shape_type, corners))
+                    if corners == 6:
+                        count = self.__shapes['hexagon']
+                        count = count + 1
+                        self.__shapes['hexagon'] = count
+                        shape_type = 'hexagon'
+
+                if self._current_shape == shape_type:
+                    if self._shape_count > 40:
+                        self._shape_count = 0
+                        self._ganrao_count = 0
+                        if shape_type in self.__zh2en:
+                            self.__robot.speak(xrarm_audio.shapes[shape_type])
+                    else:
+                        self._shape_count += 1
+
+                else:
+                    if self._ganrao_count > 10:
+                        self._shape_count = 0
+                        self._ganrao_count = 0
+
+                        self._current_shape = shape_type
+                    else:
+                        self._ganrao_count += 1
+                if shape_type in self.__zh2en:
+                    print("shape_type:%s ----%s" % (self.__zh2en[shape_type], corners))
 
     # self.__robot.show("input image", binary)
 
