@@ -52,6 +52,7 @@ class ArmBuilder(AbstractBuilder):
         rospy.init_node(name="robot_controller",
                         anonymous=True,
                         disable_signals=True)
+
         self.__ros_spin_thread = Thread(target=rospy.spin)
 
         # robot API

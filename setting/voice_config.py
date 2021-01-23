@@ -25,8 +25,6 @@ VOICE_MOD_SET = {
     '0x00': "step_back",
 }
 
-RECV_LEN = 4
-
 SNR_PROTOCOL_CONFIG = {
     "RECV_LEN": 5,
     "head": ['0xff', '0xf5'],

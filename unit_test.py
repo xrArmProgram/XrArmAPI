@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from time import sleep
 from traceback import print_exc
 from threading import Thread
@@ -33,7 +35,7 @@ def task_runner(g_task, local_app):
         sleep(0.03)
 
 
-def simple_test(task):
+def simple_test(simple_class):
     sound = PyAudioPlayer()
     sound.init()
 
@@ -47,6 +49,7 @@ def simple_test(task):
     rospy.init_node("test arm node", anonymous=True, disable_signals=True)
     robot = ArmRobot("test_arm_node", rospy, speaker, img_player=player)
 
+    task = simple_class(robot, rospy)
     task_run = Thread(target=task.run)
 
     try:
@@ -71,10 +74,9 @@ def simple_test(task):
 # 测试代码， 把task换为不同的simple的类的实现即可。
 # （该测试成功的前提是未修改其他系统组件）
 if __name__ == "__main__":
-    task = ShapeAnalysis(robot, rospy)
     
     # 开始测试，按ctrl c结束测试。
-    simple_test(task)
+    simple_test(ShapeAnalysis)
     
     # 测试结束
     print("test end")
